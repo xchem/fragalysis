@@ -11,9 +11,17 @@ as a 'base' for all documentation relating to the application.
     The original repository has been renamed and can now be found in the
     [fragalysis-package] repository.
 
+The repository is compatible with ReadTheDocs and you can find the latest documentation
+(built from the most recent changes on this repository's `main` branch) on [ReadTheDocs] at
+https://fragalysis.readthedocs.io/en/latest/.
+
+Stable documentation (built from the most recent tag in this repository) can be found at
+https://fragalysis.readthedocs.io/en/latest/.
+
 ## Local development
 To compile the documentation, which is based on [Sphinx],
-start with a Python environment and install the dependencies: -
+start with a Python environment (ideally Python 3.12, as that's the version used by
+ReadTheDocs and the GitHub CI workflow) and install the dependencies: -
 
     python -m venv venv
     source venv/bin/activate
@@ -30,4 +38,5 @@ The resulting `index.html` will be in the `docs/build/` directory.
 ---
 
 [fragalysis-package]: https://github.com/xchem/fragalysis-package
+[readthedocs]: https://app.readthedocs.org/dashboard/
 [spinx]: https://www.sphinx-doc.org/en/master
