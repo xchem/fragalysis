@@ -1,0 +1,7 @@
+# Requirements initially set from the xchem/fragalysis-stack-kubernetes repository's
+# documentation setup. See its build-requirements.txt.
+sphinx==7.2.6
+sphinx_rtd_theme==2.0.0
+sphinx-notfound-page==1.1.0
+
+myst-parser==4.0.0
