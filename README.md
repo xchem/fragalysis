@@ -16,7 +16,7 @@ The repository is compatible with ReadTheDocs and you can find the latest docume
 https://fragalysis.readthedocs.io/en/latest/.
 
 Stable documentation (built from the most recent tag in this repository) can be found at
-https://fragalysis.readthedocs.io/en/latest/.
+https://fragalysis.readthedocs.io/en/stable/.
 
 ## Local development
 To compile the documentation, which is based on [Sphinx],
