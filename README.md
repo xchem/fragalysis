@@ -2,7 +2,7 @@
 
 ![documentation build](https://github.com/xchem/fragalysis/workflows/documentation%20build/badge.svg)
 
-![RTD latest build](https://readthedocs.org/projects/fragalysis/badge/?version=latest)
+![RTD latest build](https://readthedocs.org/projects/fragalysis/badge/?version=latest&style=plastic)
 
 The "start here" repository for the Fragalysis Stack application.
 This repository (which is currently **UNDER CONSTRUCTION**) will be used
