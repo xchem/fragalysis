@@ -39,4 +39,4 @@ The resulting `index.html` will be in the `docs/build/` directory.
 
 [fragalysis-package]: https://github.com/xchem/fragalysis-package
 [readthedocs]: https://app.readthedocs.org/dashboard/
-[spinx]: https://www.sphinx-doc.org/en/master
+[sphinx]: https://www.sphinx-doc.org/en/master
