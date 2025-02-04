@@ -47,7 +47,21 @@ Ligands from experimental datasets are known as **observations** are grouped int
 
 **Poses** and **observations** have the following interface:
 
-<img src="_static/media/lhs_pose.pdf" alt="lhs" width="600px">
+<img src="_static/media/lhs_pose.png" alt="lhs" width="600px">
+
+### Display data in the 3D viewer
+
+<img src="_static/media/lhs_3d_buttons.png" alt="lhs" width="200px">
+
+The **[A][L][P][C][S][D][V]** buttons can be used to activate various representations of the observation in the 3D NGL viewer:
+
+- **[A]**: shortcut to activate **[L][P][C]**
+- **[L]**: **L**igand (ball and stick)
+- **[P]**: **P**rotein sidechains (lines)
+- **[C]**: Intera**C**tions
+- **[S]**: **S**urface (coloured by electrostatics)
+- **[D]**: Electron **D**ensity maps
+- **[V]**: Expansion **V**ectors
 
 ### What decides which hits are shown?
 
