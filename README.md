@@ -4,6 +4,8 @@
 
 ![RTD latest build](https://readthedocs.org/projects/fragalysis/badge/?version=latest&style=plastic)
 
+![GitHub last commit](https://img.shields.io/github/last-commit/xchem/fragalysis)
+
 The "start here" repository for the Fragalysis Stack application.
 This repository (which is currently **UNDER CONSTRUCTION**) will be used
 as a 'base' for all documentation relating to the application.
