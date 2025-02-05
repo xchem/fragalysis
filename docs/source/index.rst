@@ -2,9 +2,6 @@
 Fragalysis
 ##########
 
-.. warning::
-    This documentation is **UNDER CONSTRUCTION**
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -12,11 +9,4 @@ Fragalysis
    Browsing experimental (LHS) data <lhs>
    Tagging/curating experimental (LHS) data <tags>
    Creating links to specific datasets <urls>
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   Uploading compound sets to the RHS <rhs_upload>
