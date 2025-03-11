@@ -1,5 +1,5 @@
 
-# Creating URLs
+# Creating direct URLs to specific views
 
 To link to specific datasets within a target, the following syntax is supported:
 

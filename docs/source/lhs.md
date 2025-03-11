@@ -70,3 +70,19 @@ The hit navigator follows these key rules to determine which datasets are shown:
 1. All datasets displayed in the 3d viewer are shown
 1. Datasets from active tags are shown
 1. If a search string is present, only observations matching that string are shown
+
+### Searching for specific hits
+
+The search bar can be used to search for specific hits:
+
+<img src="_static/media/lhs_search.png" alt="lhs" width="300px">
+
+Your search query will be matched against the following fields:
+
+- Observation shortcode
+- Compound aliases
+- Compound ID
+
+This can be customised by clicking on the magnifying glass icon.
+
+See also [Creating direct URLs to specific views](urls.md)
