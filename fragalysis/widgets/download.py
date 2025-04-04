@@ -1,10 +1,11 @@
 import mrich
 import ipywidgets
-from .requests import STACKS, target_list, download_target
+from ..requests import STACKS, target_list, download_target
 import re
 
 
 def download():
+    """UI for downloading targets from fragalysis"""
     _download_ui_1()
 
 
@@ -58,7 +59,7 @@ def _download_ui_2(ui_main, stack: str, token: str | None = None):
         description="Target",
     )
 
-    w_destination = ipywidgets.Text(description="Destination", value=".")
+    w_destination = ipywidgets.Text(description="Destination", value="..")
 
     b_download = ipywidgets.Button(
         description="Download",
