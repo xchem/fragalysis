@@ -19,7 +19,10 @@ def _session(stack: str = "production", token: str | None = None):
 
     import requests
 
-    url_root = STACKS[stack]
+    if stack in STACKS:
+        url_root = STACKS[stack]
+    else:
+        url_root = stack
 
     landing_page_url = urljoin(url_root, LANDING_PAGE_URL)
 
@@ -169,3 +172,6 @@ def download_target(
 
         else:
             mrich.error("Download Failed")
+            return None
+
+    return target_dir
