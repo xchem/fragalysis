@@ -44,3 +44,10 @@ urls.md
 rhs.md
 rhs_upload.md
 ```
+
+### Other Pages
+
+```{toctree}
+:maxdepth: 1
+changelog.md
+```
