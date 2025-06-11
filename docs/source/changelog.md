@@ -16,7 +16,10 @@
 ## Release Notes
 
 
-
+- [2025.06.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.06.1)
+	- *FEATURE*: [New endpoint to expose activity data](https://github.com/m2ms/fragalysis-frontend/issues/1780)
+	- *IMPROVEMENT*: [New endpoint for LHS data upload validation](https://github.com/m2ms/fragalysis-frontend/issues/1774)
+	- *BUG*: [Fixes bug regarding LHS upload and soakDB experiments](https://github.com/m2ms/fragalysis-frontend/issues/1785)
 - [2025.05.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.05.1)
 	- *FEATURE*: [New landing page / targets list](https://github.com/m2ms/fragalysis-frontend/issues/1565)
 	- *FEATURE*: [SoakDB data included in XCA output, and Fragalysis download](https://github.com/m2ms/fragalysis-frontend/issues/1768)
