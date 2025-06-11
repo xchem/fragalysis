@@ -45,6 +45,13 @@ rhs.md
 rhs_upload.md
 ```
 
+### Programmatic Interface (API)
+
+```{toctree}
+:maxdepth: 1
+api.md
+```
+
 ### Other Pages
 
 ```{toctree}
