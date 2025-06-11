@@ -51,3 +51,10 @@ rhs_upload.md
 :maxdepth: 1
 api.md
 ```
+
+### Other Pages
+
+```{toctree}
+:maxdepth: 1
+changelog.md
+```
