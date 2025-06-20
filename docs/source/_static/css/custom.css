@@ -36,3 +36,25 @@ dl.class > dt:first-of-type {
 .wy-nav-content {
     max-width: none;
 }
+
+/* Change sidebar background color */
+.wy-side-nav-search {
+    /*background-color: #003366;*/
+    background-color: #1a5228;
+}
+
+/* Change text color of the sidebar links */
+.wy-menu-vertical a {
+    color: #ffffff;
+}
+
+/* Change link hover */
+.wy-menu-vertical a:hover {
+    color: #3bba4c;
+}
+
+/* Change content background */
+.rst-content {
+    background-color: #fdfdfd;
+    color: #333;
+}

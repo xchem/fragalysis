@@ -1,63 +1,9 @@
 import mrich
-from urllib.parse import urljoin
 from pathlib import Path
+from urllib.parse import urljoin
 
-STACKS = {
-    "staging": "https://fragalysis.xchem.diamond.ac.uk",
-    "production": "https://fragalysis.diamond.ac.uk",
-}
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-
-LOGIN_URL = "/accounts/login/"
-DOWNLOAD_URL = "/api/download_structures/"
-LANDING_PAGE_URL = "/viewer/react/landing/"
-TARGETS_URL = "/api/targets/"
-PROJECTS_URL = "/api/projects/"
-
-
-def _session(stack: str = "production", token: str | None = None):
-
-    import requests
-
-    if stack in STACKS:
-        url_root = STACKS[stack]
-    else:
-        url_root = stack
-
-    landing_page_url = urljoin(url_root, LANDING_PAGE_URL)
-
-    session = requests.Session()
-    session.root = url_root
-
-    session.headers.update(
-        {
-            "User-Agent": USER_AGENT,
-            "Referer": landing_page_url,
-            "Referrer-policy": "same-origin",
-        }
-    )
-
-    session.get(landing_page_url)  # sets csrftoken
-
-    # set manually if still missing
-    csrftoken = session.cookies.get("csrftoken", None)
-    if csrftoken:
-        session.headers.update(
-            {
-                "X-CSRFToken": csrftoken,
-                "User-Agent": USER_AGENT,
-            }
-        )
-
-    if token:
-        session.cookies.update(
-            {
-                "sessionid": token,
-            }
-        )
-
-    return session
-
+from .session import _session
+from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL
 
 def target_list(stack: str = "production", token: str | None = None):
 
