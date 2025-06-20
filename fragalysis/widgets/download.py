@@ -1,6 +1,7 @@
 import mrich
 import ipywidgets
-from ..requests import STACKS, target_list, download_target
+from ..requests.urls import STACKS
+from ..requests.download import target_list, download_target
 import re
 
 
