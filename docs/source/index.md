@@ -3,6 +3,14 @@
 
 This page gives a brief introduction to the Fragalysis app, see the full documentation tree [below](#documentation-pages).
 
+## Quick links:
+
+- [**DLS Fragalysis Production stack**](https://fragalysis.diamond.ac.uk)
+- [**DLS Fragalysis Staging stack**](https://fragalysis.xchem.diamond.ac.uk)
+- [**fragalysis-app slack channel**](https://xchem-workspace.slack.com/archives/C02RCMA6S0Z)
+- [**What's changed? (Release notes)**](changelog)
+- [**XChemAlign documentation**](https://xchem-align.readthedocs.io/en/latest/USER-GUIDE.html)
+
 ## The Fragalysis "viewer" interface
 
 <img src="_static/media/fragalysis.png" alt="lhs" width="800px">
