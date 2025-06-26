@@ -11,19 +11,21 @@ Fragalysis offers simplified access to computational resources via JupyterLab. J
 
 <img src="_static/media/squonk_dm.png" alt="squonk-data-manager" width="600px">
 
-3. Go to the `Apps/Jobs` page (top middle button)
+3. If needed, create a new `Project` in the data manager (settings icon top right)
 
-4. Find the `JupyterNotebook` card and click `RUN`
+4. Go to the `Apps/Jobs` page (top middle button)
 
-5. Configure the job. All the tutorials in this page use the `FFF Dev` container image, otherwise the default settings are appropriate unless specified.
+5. Find the `JupyterNotebook` card and click `RUN`
+
+6. Configure the job. All the tutorials in this page use the `FFF Dev` container image, otherwise the default settings are appropriate unless specified.
 
 <img src="_static/media/jupyterlab_config.png" alt="app-config" width="600px">
 
-6. Click run, and wait for the app to initialise. A button `OPEN` will appear
+7. Click run, and wait for the app to initialise. A button `OPEN` will appear
 
 <img src="_static/media/job_instance.png" alt="job-instance" width="600px">
 
-7. Familiarise yourself with the JupyterLab deployment in the [next section](#general-tips)
+8. Familiarise yourself with the JupyterLab deployment in the [next section](#general-tips)
 
 ## General tips
 
