@@ -27,7 +27,9 @@ Fragalysis offers simplified access to computational resources via JupyterLab. J
 
 8. Familiarise yourself with the JupyterLab deployment in the [next section](#general-tips)
 
-9. Once you have a notebook app configured and running, you can bookmark the link to the notebook to access it without navigating Squonk
+```{note}
+Once you have a notebook app configured and running, you can bookmark the link to the notebook to access it without navigating Squonk
+```
 
 ## General tips
 
@@ -37,7 +39,11 @@ Fragalysis offers simplified access to computational resources via JupyterLab. J
 
 When you first launch a notebook app with the `FFF Dev` container image you will only see the `welcome.ipynb` notebook in the left-hand-side file navigator. When you open this notebook you will see two code cells. Clicking the play button in the top menu bar will allow you to execute them and create two interfaces.
 
-The *Get template notebooks* interface offers buttons to fetch template notebooks from the template repository. **Do note that this would overwrite any changes you have made to previously copied template instances**
+The *Get template notebooks* interface offers buttons to fetch template notebooks from the template repository. 
+
+```{warning}
+Do note that fetching template notebooks would overwrite any changes you have made to previously copied templates
+```
 
 The *Update repositories* interface offers buttons to update both the template notebook repository and fragalysis python package to it's latest version. Use these buttons if you feel that your installation is stale and does not represent what's shown in this documentation.
 
