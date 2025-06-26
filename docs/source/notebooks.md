@@ -27,6 +27,8 @@ Fragalysis offers simplified access to computational resources via JupyterLab. J
 
 8. Familiarise yourself with the JupyterLab deployment in the [next section](#general-tips)
 
+9. Once you have a notebook app configured and running, you can bookmark the link to the notebook to access it without navigating Squonk
+
 ## General tips
 
 <img src="_static/media/nb_welcome.png" alt="notebook-welcome" width="600px">
