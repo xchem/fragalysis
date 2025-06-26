@@ -94,10 +94,10 @@ def _cif_ui_3(ui_main, pdb: Path):
     w_smiles = ipywidgets.Text(description="SMILES", value=None)
 
     cif = pdb.parent / f'{pdb.name.removesuffix(".pdb")}.cif'
-    w_cif = ipywidgets.Text(description="CIF File", value=str(cif))
+    w_cif = ipywidgets.Text(description="Output", value=str(cif))
 
     b_create = ipywidgets.Button(
-        description="Output CIF",
+        description="Create CIF",
     )
 
     def button_func(button):
