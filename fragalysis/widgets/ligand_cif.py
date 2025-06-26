@@ -49,6 +49,12 @@ def _cif_ui_2(ui_main, dir: str = "."):
 
     pdbs = sorted([p.name for p in Path(dir).glob("*.pdb")])
 
+    if not pdbs:
+        with output:
+            mrich.error("No PDB files in this directory.")
+            ui_main.children = [ui_main.children[0], output]
+            return
+
     w_pdb = ipywidgets.Dropdown(
         options=pdbs,
         description="PDB File",
