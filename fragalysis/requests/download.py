@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from .session import _session
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL
 
+
 def target_list(stack: str = "production", token: str | None = None):
 
     with _session(stack, token) as session:
@@ -14,7 +15,7 @@ def target_list(stack: str = "production", token: str | None = None):
         project_response = session.get(projects_url)
 
         if not project_response.ok:
-            mrich.error("Response failed", projects_url, project_response.status_code)
+            mrich.error("Request failed", projects_url, project_response.status_code)
             return None
 
         # targets
@@ -22,7 +23,7 @@ def target_list(stack: str = "production", token: str | None = None):
         target_response = session.get(targets_url)
 
         if not target_response.ok:
-            mrich.error("Response failed", targets_url, target_response.status_code)
+            mrich.error("Request failed", targets_url, target_response.status_code)
             return None
 
         targets_data = target_response.json()
