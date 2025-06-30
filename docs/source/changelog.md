@@ -16,6 +16,11 @@
 ## Release Notes
 
 
+- [2025.06.2](https://github.com/xchem/fragalysis-stack/releases/tag/2025.06.2)
+	* _NEW FEATURE_ [API Endpoint to change activity data types](https://github.com/m2ms/fragalysis-frontend/issues/1797)
+	* _NEW FEATURE_ [Support main status setting from metadata CSV upload](https://github.com/m2ms/fragalysis-frontend/issues/1807)
+	* _NEW FEATURE_ [RHS compound sets included in download as SDF files](https://github.com/m2ms/fragalysis-frontend/issues/1583)
+	* _BUG_ [Fixes observation quality missing from metadata CSV](https://github.com/m2ms/fragalysis-frontend/issues/1804)
 - [2025.06.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.06.1)
 	- *FEATURE*: [New endpoint to expose activity data](https://github.com/m2ms/fragalysis-frontend/issues/1780)
 	- *IMPROVEMENT*: [New endpoint for LHS data upload validation](https://github.com/m2ms/fragalysis-frontend/issues/1774)
