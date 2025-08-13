@@ -44,8 +44,6 @@ The Fragalysis Stack you find running in Kubernetes relies on a number of relate
 (and diverse) repositories. We've tried to capture references to all of them
 below, in no particular order: -
 
----
-
 **xchem respositories**
 
 [fragalysis-package] : Logic that allows connection to the neo4j graph
@@ -75,8 +73,6 @@ as an interface to ISPyB, yielding Target Access Strings based on username
 
 [docker-neo4j] : Custom neo4j image providing built-in S3 bucket bulk-loading
 
----
-
 **3rd-party respositories (Informatics Matters)**
 
 There are also a number of 3rd-party repositories that provide facilities for
@@ -101,8 +97,6 @@ accounting and billign services (a private repository and container image)
 >   Numerous other respositories exist for Job execution etc.
     For inmformatics Matters any respository
     that has the topic tag `squonk2` or `squonk2-jobs` might be relevant.
-
----
 
 **Fragmentation**
 
