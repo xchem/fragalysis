@@ -48,66 +48,55 @@ below, in no particular order: -
 
 **xchem respositories**
 
-[fragalysis-package]
-: Logic that allows connection to the neo4j graph
+[fragalysis-package] : Logic that allows connection to the neo4j graph
 
-[fragalysis-backend]
-: Django/REST Framework application
+[fragalysis-backend] : Django/REST Framework application
 
-[fragalysis-frontend]
-: Django visual application (frontend)
+[fragalysis-frontend] : Django visual application (frontend)
 
-[fragalysis-stack]
-: The build logic that combines the backed and frontend to create the container image
+[fragalysis-stack] : The build logic that combines the backed and frontend
+to create the container image
 
-[fragalysis-api]
-: Command-line API utilities
+[fragalysis-api] : Command-line API utilities
 
-[fragalysis-keycloak]
-: A specialised build of keycloak to provide a custom login theme
+[fragalysis-keycloak] : A specialised build of keycloak to provide a custom login theme
 
-[fragalysis-ispyb-target-access-authenticator]
-: Code for the container image that acts as an interface to ISPyB, yielding Target Access Strings based on username
+[fragalysis-ispyb-target-access-authenticator] : Code for the container image that acts
+as an interface to ISPyB, yielding Target Access Strings based on username
 
-[fragalysis-mock-target-access-authenticator]
-: A "mock" ISPyB authenticator (providing results based on a config file)
+[fragalysis-mock-target-access-authenticator] : A "mock" ISPyB authenticator
+(providing results based on a config file)
 
-[fragalysis-stack-kubernetes]
-: Ansible playbooks for application deployment and management
+[fragalysis-stack-kubernetes] : Ansible playbooks for application deployment and management
 
-[fragalysis-stack-behaviour-tests]
-: Basic gherkin-based behaviour tests for the stack API
+[fragalysis-stack-behaviour-tests] : Basic gherkin-based behaviour tests for the stack API
 
-[xchem-align]
-: Tools to generate input data for Fragalysis
+[xchem-align] : Tools to generate input data for Fragalysis
 
-[docker-neo4j]
-: Custom neo4j image providing built-in S3 bucket bulk-loading
+[docker-neo4j] : Custom neo4j image providing built-in S3 bucket bulk-loading
 
 ---
 
-**3rd-party respositories**
+**3rd-party respositories (Informatics Matters)**
 
 There are also a number of 3rd-party repositories that provide facilities for
 the Fragalysis Stack application: -
 
-[squonk2-data-manager] (Informatics Matters/PRIVATE)
-: The Squonk2 Data Manager (a private repository and container image)
+[squonk2-data-manager] (`PRIVATE`) : The Squonk2 Data Manager
+(a private repository and container image)
 
-[squonk2-account-server] (Informatics Matters/PRIVATE)
-: The Squonk2 Account Server providing accounting and billign services (a private repository and container image)
+[squonk2-account-server] (`PRIVATE`) : The Squonk2 Account Server providing
+accounting and billign services (a private repository and container image)
 
-[squonk2-data-manager-ui] (Informatics Matters)
-: The Squonk2 UI
+[squonk2-data-manager-ui] : The Squonk2 UI
 
-[squonk2-data-manager-jupyter-operator] (Informatics Matters)
-: The Squonk2 Jupyter Notebook operator (launches notebooks)
+[squonk2-data-manager-jupyter-operator] : The Squonk2 Jupyter Notebook operator
+(launches notebooks)
 
-[squonk2-data-manager-job-operator] (Informatics Matters)
-: The Squonk2 Job operator (launches Jobs)
+[squonk2-data-manager-job-operator] : The Squonk2 Job operator
+(launches Jobs)
 
-[squonk2-fragmenstein] (Informatics Matters)
-: Squonk2 JOb defintions used by the Fragalysi Stack
+[squonk2-fragmenstein] : Squonk2 JOb defintions used by the Fragalysi Stack
 
 >   Numerous other respositories exist for Job execution etc.
     For inmformatics Matters any respository
