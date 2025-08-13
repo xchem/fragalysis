@@ -39,6 +39,18 @@ Then, to build the HTML documentation, run the following command: -
 
 The resulting `index.html` will be in the `docs/build/` directory.
 
+## See also
+The Fragalysis Stack you find running in Kubernetes relies on a number of related
+(and diverse) repositories. We've tried to capture references to all of them
+below: -
+
+| Repository | Description |
+| --- | --- |
+| fragalysis-package | Logic that allows connection to the neo4j graph |
+| ragalysis-backend | Django/REST Framework application |
+| fragalysis-frontend | Django application (frontend) |
+| fragalysis-stack | The respository that combines the backed and frontend to create the container image |
+
 ---
 
 [fragalysis-package]: https://github.com/xchem/fragalysis-package
