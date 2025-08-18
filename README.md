@@ -92,11 +92,15 @@ accounting and billign services (a private repository and container image)
 [squonk2-data-manager-job-operator] : The Squonk2 Job operator
 (launches Jobs)
 
-[squonk2-fragmenstein] : Squonk2 JOb defintions used by the Fragalysi Stack
+[squonk2-fragmenstein] : Squonk2 Job defintions used by the Fragalysi Stack
 
 >   Numerous other respositories exist for Job execution etc.
     For inmformatics Matters any respository
     that has the topic tag `squonk2` or `squonk2-jobs` might be relevant.
+
+[docker-volume-replicator] : Replicates volumes (used for media)
+
+[bandr] : PostgreSQL backup and recovery container images
 
 **Fragmentation**
 
@@ -112,6 +116,8 @@ typically kubernetes or slurm: -
 
 ---
 
+[bandr]: https://github.com/InformaticsMatters/bandr
+[docker-volume-replicator]: https://github.com/InformaticsMatters/docker-volume-replicator
 [squonk2-fragmenstein]: https://github.com/InformaticsMatters/squonk2-fragmenstein
 [squonk2-data-manager-job-operator]: https://github.com/InformaticsMatters/squonk2-data-manager-job-operator
 [squonk2-data-manager-jupyter-operator]: https://github.com/InformaticsMatters/squonk2-data-manager-jupyter-operator
