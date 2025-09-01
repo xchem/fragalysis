@@ -65,6 +65,7 @@ notebooks.md
 ```{toctree}
 :maxdepth: 1
 api.md
+py_api.md
 ```
 
 ### Other Pages

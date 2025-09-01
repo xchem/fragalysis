@@ -1,5 +1,5 @@
 
-# Using the Fragalysis API
+# Using the Fragalysis REST API
 
 The list of Fragalysis' REST API endpoints can be found at `<fragalysis url>/api`.
 
