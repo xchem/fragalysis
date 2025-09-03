@@ -53,11 +53,19 @@ rhs.md
 rhs_upload.md
 ```
 
+### Jupyter Notebooks
+
+```{toctree}
+:maxdepth: 1
+notebooks.md
+```
+
 ### Programmatic Interface (API)
 
 ```{toctree}
 :maxdepth: 1
 api.md
+py_api.md
 ```
 
 ### Other Pages

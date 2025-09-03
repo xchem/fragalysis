@@ -6,7 +6,13 @@ from .session import _session
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL
 
 
-def target_list(stack: str = "production", token: str | None = None):
+def target_list(stack: str = "production", token: str | None = None) -> list[dict]:
+    """Request a list of target dictionaries from a Fragalysis deployment
+
+    :param stack: shorthand or URL of Fragalysis deployment, defaults to "production"
+    :param token: optional authentication token
+    :returns: list of target dictionaries with "id", "title", and "project" keys
+    """
 
     with _session(stack, token) as session:
 
@@ -46,7 +52,15 @@ def download_target(
     stack: str = "production",
     token: str | None = None,
     destination: str = ".",
-):
+) -> None:
+    """Request a target download from a Fragalysis deployment
+
+    :param name: name of the target to request
+    :param tas: target access string of the target
+    :param stack: shorthand or URL of Fragalysis deployment, defaults to "production"
+    :param token: optional authentication token
+    :param destination: directory within which to place the download, defaults to "." (current working directory)
+    """
 
     payload = {
         "all_aligned_structures": True,
