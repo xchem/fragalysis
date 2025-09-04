@@ -18,7 +18,9 @@ def _cif_ui_1():
 
     mrich.h3("ligand CIF")
 
-    w_dir = ipywidgets.Text(description="Directory", value=".")
+    w_dir = ipywidgets.Text(
+        description="Directory", value=".", layout=ipywidgets.Layout(width="400px")
+    )
 
     ui_1 = ipywidgets.VBox()
     ui_main = ipywidgets.VBox([ui_1])
@@ -58,6 +60,7 @@ def _cif_ui_2(ui_main, dir: str = "."):
     w_pdb = ipywidgets.Dropdown(
         options=pdbs,
         description="PDB File",
+        layout=ipywidgets.Layout(width="400px"),
     )
 
     b_download = ipywidgets.Button(
@@ -66,7 +69,7 @@ def _cif_ui_2(ui_main, dir: str = "."):
 
     def button_func(button):
         with output:
-            _cif_ui_3(ui_main=ui_main, pdb=Path(dir) / w_pdb.value)
+            _cif_ui_3(ui_main=ui_main, pdb=Path(dir) / w_pdb.value, output=output)
 
     b_download.on_click(button_func)
 
@@ -74,27 +77,33 @@ def _cif_ui_2(ui_main, dir: str = "."):
     ui_main.children = [ui_main.children[0], ui_2]
 
 
-def _cif_ui_3(ui_main, pdb: Path):
-
-    output = ipywidgets.Output()
+def _cif_ui_3(ui_main, pdb: Path, output):
 
     with output:
         sys = mp.parse(pdb, verbosity=0)
 
+    output = ipywidgets.Output()
+
     ui_3 = ipywidgets.VBox()
 
     ligs = [r for r in sys.residues if r.type == "LIG"]
+
     options = [r.name_number_chain_str for r in ligs]
 
     w_lig = ipywidgets.Dropdown(
         options=options,
         description="Residue",
+        layout=ipywidgets.Layout(width="400px"),
     )
 
-    w_smiles = ipywidgets.Text(description="SMILES", value=None)
+    w_smiles = ipywidgets.Text(
+        description="SMILES", value=None, layout=ipywidgets.Layout(width="400px")
+    )
 
     cif = pdb.parent / f'{pdb.name.removesuffix(".pdb")}.cif'
-    w_cif = ipywidgets.Text(description="Output", value=str(cif))
+    w_cif = ipywidgets.Text(
+        description="Output", value=str(cif), layout=ipywidgets.Layout(width="400px")
+    )
 
     b_create = ipywidgets.Button(
         description="Create CIF",
@@ -109,7 +118,19 @@ def _cif_ui_3(ui_main, pdb: Path):
 
     b_create.on_click(button_func)
 
-    ui_3.children = [w_lig, w_smiles, w_cif, b_create, output]
+    b_smiles = ipywidgets.Button(
+        description="SMILES from PDB",
+    )
+
+    def button_func(button):
+        with output:
+            res = ligs[options.index(w_lig.value)]
+            smiles = mp.rdkit.mol_to_smiles(res.rdkit_mol)
+            w_smiles.value = smiles
+
+    b_smiles.on_click(button_func)
+
+    ui_3.children = [w_lig, w_smiles, w_cif, b_smiles, b_create, output]
     ui_main.children = [ui_main.children[0], ui_main.children[1], ui_3]
 
 
