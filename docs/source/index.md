@@ -43,6 +43,7 @@ See also the [LHS documentation page](lhs).
 lhs.md
 tags.md
 urls.md
+assay_data_upload.md
 ```
 
 ### Computed Structures (RHS)
