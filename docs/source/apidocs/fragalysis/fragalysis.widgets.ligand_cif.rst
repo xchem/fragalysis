@@ -50,7 +50,7 @@ API
 
    .. autodoc2-docstring:: fragalysis.widgets.ligand_cif._cif_ui_2
 
-.. py:function:: _cif_ui_3(ui_main, pdb: pathlib.Path)
+.. py:function:: _cif_ui_3(ui_main, pdb: pathlib.Path, output)
    :canonical: fragalysis.widgets.ligand_cif._cif_ui_3
 
    .. autodoc2-docstring:: fragalysis.widgets.ligand_cif._cif_ui_3
