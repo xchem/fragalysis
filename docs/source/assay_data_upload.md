@@ -3,6 +3,10 @@
 
 Fragalysis supports annotation of experimental data with text or numeric scores that are linked either to compound codes or observation short codes.
 
+```{warning}
+Do not upload any assay data to a public target that is confidential! Measurements against compounds that do not (yet) have structures will still be accessible to authorised API users.
+```
+
 ## Creating the assay data CSV
 
 Create a CSV with:
