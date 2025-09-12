@@ -16,6 +16,19 @@
 ## Release Notes
 
 
+- [2025.09.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.09.1)
+	* _NEW FEATURE_ [New LHS UI with data columns and filters](https://github.com/m2ms/fragalysis-frontend/issues/1417)
+	* _IMPROVEMENT_ [New endpoint for plotly graph upload](https://github.com/m2ms/fragalysis-frontend/issues/1817)
+	* _IMPROVEMENT_ [Refinement resolution in metadata.csv](https://github.com/m2ms/fragalysis-frontend/issues/1831)
+	* _IMPROVEMENT_ [Management command to change proposal of existing target](https://github.com/m2ms/fragalysis-frontend/issues/1515)
+	* _IMPROVEMENT_ [b/e for assay data referencing observations](https://github.com/m2ms/fragalysis-frontend/issues/1847)
+	* _IMPROVEMENT_ [Link LHS observations to matching RHS compounds](https://github.com/m2ms/fragalysis-frontend/issues/1591)
+	* _IMPROVEMENT_ [XCA uploader support for large uploads](https://github.com/m2ms/fragalysis-frontend/issues/1872)
+	* _BUG_ [Fix erroneous comparison in RHS upload](https://github.com/m2ms/fragalysis-frontend/issues/1840)
+	* _BUG_ [Remove original SMILES requirement from RHS upload](https://github.com/m2ms/fragalysis-frontend/issues/1846)
+	* _BUG_ [Skip assay data with empty headers](https://github.com/m2ms/fragalysis-frontend/issues/1851)
+	* _BUG_ [Fix download failing with queryset error](https://github.com/m2ms/fragalysis-frontend/issues/1879)
+	* _BUG_ [Catch rendering in progress UI bug](https://github.com/m2ms/fragalysis-frontend/issues/1828)
 - [2025.06.2](https://github.com/xchem/fragalysis-stack/releases/tag/2025.06.2)
 	* _NEW FEATURE_ [API Endpoint to change activity data types](https://github.com/m2ms/fragalysis-frontend/issues/1797)
 	* _NEW FEATURE_ [Support main status setting from metadata CSV upload](https://github.com/m2ms/fragalysis-frontend/issues/1807)
