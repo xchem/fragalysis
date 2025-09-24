@@ -21,6 +21,7 @@ def templates():
     TEMPLATE_BUTTONS = [
         ("download", "Download a fragalysis target", "download"),
         ("ligand_cif", "Create ligand CIF", "file"),
+        ("posebusters", "PoseBusters Checks", "ghost"),
     ]
 
     widgets = []
