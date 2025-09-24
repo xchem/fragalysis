@@ -15,7 +15,13 @@
 
 ## Release Notes
 
-
+- [2025.09.2](https://github.com/xchem/fragalysis-stack/releases/tag/2025.09.1)
+	* _NEW FEATURE_ [New table interface for snapshots](https://github.com/m2ms/fragalysis-frontend/issues/1734)
+	* _NEW FEATURE_ [Molecular filtering for hits](https://github.com/m2ms/fragalysis-frontend/issues/1820)
+	* _IMPROVEMENT_ [Improved reliability of large downloads](https://github.com/m2ms/fragalysis-frontend/issues/1859)
+	* _BUG_ [Fixes RHS upload error reporting](https://github.com/m2ms/fragalysis-frontend/issues/1904)
+	* _BUG_ [Fixes LHS upload error](https://github.com/m2ms/fragalysis-frontend/issues/1903)
+	* _BUG_ [Fixes assay data referencing observations](https://github.com/m2ms/fragalysis-frontend/issues/1847)
 - [2025.09.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.09.1)
 	* _NEW FEATURE_ [New LHS UI with data columns and filters](https://github.com/m2ms/fragalysis-frontend/issues/1417)
 	* _IMPROVEMENT_ [New endpoint for plotly graph upload](https://github.com/m2ms/fragalysis-frontend/issues/1817)
