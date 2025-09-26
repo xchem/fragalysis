@@ -1,3 +1,5 @@
+import re
+import time
 import mrich
 from pathlib import Path
 from urllib.parse import urljoin
@@ -96,9 +98,45 @@ def download_target(
             )
 
         if start_download_process_response.ok:
-            file_url_response = start_download_process_response.json()
+            response_json = start_download_process_response.json()
 
-            file_url = file_url_response["file_url"]
+            task_status_url = response_json.get("task_status_url")
+
+            if not task_status_url:
+                raise ValueError("No task URL returned")
+
+            ### CONTINUOUSLY MONITOR DOWNLOAD TASK
+
+            task_status_url = urljoin(session.root, task_status_url)
+
+            with mrich.loading("Preparing download"):
+                for i in range(100_000):
+
+                    status = session.get(task_status_url)
+
+                    try:
+                        status_json = status.json()
+                    except JSONDecodeError:
+                        continue
+
+                    started = status_json.get("started", False)
+                    finished = status_json.get("finished", False)
+                    
+                    if finished:
+                        break
+
+                    time.sleep(0.5)
+
+                else:
+                    mrich.error("Timed out")
+                    raise ValueError
+
+            file_url = status_json.get("messages", "")
+
+            if not re.search(r"^\/code\/media\/downloads\/.*\.tar\.gz$", file_url):
+                mrich.error("No tarball in payload")
+
+            ### DOWNLOAD PREPARED PAYLOAD
 
             local_filename = destination / Path(file_url).name
 
@@ -108,7 +146,7 @@ def download_target(
 
                 with session.get(
                     download_api_url,
-                    params=file_url_response,
+                    params=dict(file_url=file_url),
                     stream=True,
                 ) as r:
 
@@ -117,19 +155,38 @@ def download_target(
                         for chunk in r.iter_content(chunk_size=8192):
                             f.write(chunk)
 
-            with mrich.loading("Unzipping..."):
+            if file_url.endswith(".zip"):
 
-                import zipfile
+                with mrich.loading("Unzipping..."):
 
-                target_dir = destination / Path(file_url).name.removesuffix(".zip")
+                    import zipfile
 
-                target_dir.mkdir(exist_ok=True)
+                    target_dir = destination / Path(file_url).name.removesuffix(".zip")
 
-                mrich.writing(target_dir)
-                with zipfile.ZipFile(local_filename, "r") as zip_ref:
-                    zip_ref.extractall(target_dir)
+                    target_dir.mkdir(exist_ok=True)
 
-                mrich.success("Download complete:", target_dir)
+                    mrich.writing(target_dir)
+                    with zipfile.ZipFile(local_filename, "r") as zip_ref:
+                        zip_ref.extractall(target_dir)
+
+            elif file_url.endswith(".tar.gz"):
+
+                with mrich.loading("Expanding tarball..."):
+
+                    import tarfile
+
+                    target_dir = destination / Path(file_url).name.removesuffix(".tar.gz")
+
+                    target_dir.mkdir(exist_ok=True)
+
+                    mrich.writing(target_dir)
+                    with tarfile.open(local_filename, "r:gz") as tar_ref:
+                        tar_ref.extractall(target_dir)
+
+            else:
+                raise ValueError("Unsupported filetype")
+
+            mrich.success("Download complete:", target_dir)
 
         else:
             mrich.error("Download Failed")
