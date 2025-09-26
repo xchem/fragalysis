@@ -68,9 +68,9 @@ def _download_ui_2(ui_main, stack: str, token: str | None = None):
 
     def button_func(button):
         with output:
-            match = re.search(r"^(.*) \((lb[0-9]*-[0-9]*)\)$", w_target.value)
+            match = re.search(r"^(.*) \(((lb|sw)[0-9]*-[0-9]*)\)$", w_target.value)
 
-            name, tas = match.groups()
+            name, tas, prefix = match.groups()
 
             download_target(
                 name=name,
