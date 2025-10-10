@@ -53,7 +53,7 @@ to retrieve the statistics: -
 
     http https:///ta-authenticator.xchem.diamond.ac.uk X-TAAStatsKey:${STATS_KEY}
 
-    curl https:///ta-authenticator.xcdhem.diamond.ac.uk -H X-TAAStatsKey:${STATS_KEY}
+    curl https:///ta-authenticator.xchem.diamond.ac.uk -H X-TAAStatsKey:${STATS_KEY}
 
 The response is quite detailed, and many parts of it will only make sense
 if you understand the inner-workings of the authenticator.
