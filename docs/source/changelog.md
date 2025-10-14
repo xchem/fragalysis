@@ -15,7 +15,13 @@
 
 ## Release Notes
 
-- [2025.09.2](https://github.com/xchem/fragalysis-stack/releases/tag/2025.09.1)
+- [2025.10.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.1)
+	* _IMPROVEMENT_ [Automatically restore missing structure files](https://github.com/m2ms/fragalysis-frontend/issues/1609)
+	* _IMPROVEMENT_ [More robust CSV formatting in downloads](https://github.com/m2ms/fragalysis-frontend/issues/1910)
+	* _IMPROVEMENT_ [Direct users to log in if not authorised](https://github.com/m2ms/fragalysis-frontend/issues/1716)
+	* _IMPROVEMENT_ [Clearer staging warning message with link to production](https://github.com/m2ms/fragalysis-frontend/issues/1716)
+	* _BUG_ [Fix private targets showing up in wrong list](https://github.com/m2ms/fragalysis-frontend/issues/1902)
+- [2025.09.2](https://github.com/xchem/fragalysis-stack/releases/tag/2025.09.2)
 	* _NEW FEATURE_ [New table interface for snapshots](https://github.com/m2ms/fragalysis-frontend/issues/1734)
 	* _NEW FEATURE_ [Molecular filtering for hits](https://github.com/m2ms/fragalysis-frontend/issues/1820)
 	* _IMPROVEMENT_ [Improved reliability of large downloads](https://github.com/m2ms/fragalysis-frontend/issues/1859)
