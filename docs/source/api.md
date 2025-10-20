@@ -21,16 +21,54 @@ that can be used, although the use of `lb` and `sw` are commonly permitted.
 
 So, what you see (and what you can edit) is controlled by your proposal membership.
 
+For performance reasons, and because the underlying membership database may not always
+be available, the authenticator caches each user's TAS set after it has been collected.
+The cache, for each user, is refreshed after a few minutes. This approach ensures
+that the authenticator can respond promptly to TAS requests.
+
 ### Seeing your TAS set
 
-If you are unsure why you are not seeing material that you think you should be able to
-Fragalysis exposes a REST API endpoint that can be used to see your TAS membership.
+If you are unsure why you are not seeing material that you think you should be able to,
+it may be due to your TAS membership. Fragalysis exposes an authenticated
+REST API endpoint that you can use to see your TAS membership.
 
-As the membership database may not always be available the authenticator caches
-each user's TAS set as it is collected. So, when the database is offline or
-communication errors are encountered, the authenticator returns your cache.
-the cache is nor persisted and wil be lost, for example, if the application
-is rebooted.
+If you are logged in you can visit `/api/tas_stats`.
+
+Its response will contain the list of TAS values the authenticator believes are
+assigned to you. It is a simple JSON payload, an example is shown below: -
+
+```json
+{
+  "user": "abc12345",
+  "version": {
+    "kind": "ISPYB",
+    "name": "XChem Python FastAPI TAS Authenticator",
+    "version": "1.4.4",
+    "location": "http://auth.ta-authenticator.svc"
+  },
+  "ping": "OK",
+  "target_access": ["lb12345-1", "lb56789-2", "lb80745-254"]
+}
+```
+
+The **user** section displays your user ID.
+
+The **version** section provides details of the authenticator providing the TAS
+values including its own API URL. Typically the authenticator is only accessible
+to applications from within the deployment cluster.
+
+The **ping** section reports the state of the connection between the authenticator and
+the underlying databases. This will be `OK` if the authenticator can access the
+database or `Not OK` if it cannot.
+
+The **target_access** section is a list of TAS values assigned to you.
+
+If you are not logged in you can still obtain details of the authenticator,
+and the **ping** status - everything except a listr of TAS values.
+
+>   The ISPyB authenticator is just one authenticator that can be deployed.
+    The administrator may have deployed a different authenticator for you stack,
+    so always check the version is what you expect.
 
 ### Understanding the authenticator
 
