@@ -13,6 +13,7 @@ from .urls import (
     JOB_TRANSFER_URL,
     SITE_OBSERVATIONS_URL,
     TASK_STATUS_URL,
+    USER_URL,
 )
 
 """
@@ -49,7 +50,8 @@ def fragmenstein_placement(
     mrich.var("stack", stack)
     mrich.var("#placements", len(placements))
 
-    author_id = 3
+    author_id = user_info(stack=stack, token=token)["user_id"]
+    mrich.var("user_id", author_id)
 
     # GET TARGET AND PROJECT INFO
 
@@ -173,7 +175,7 @@ def fragmenstein_placement(
                 if task_id in completed:
                     continue
 
-                status_url = urljoin(session.root, TASK_STATUS_URL + "/" + task_id)
+                status_url = urljoin(session.root, TASK_STATUS_URL + task_id)
 
                 status = session.get(status_url)
 
@@ -210,6 +212,27 @@ def fragmenstein_placement(
     """
 
     # MONITOR JOB
+
+
+def user_info(
+    stack: str = "production",
+    token: str | None = None,
+) -> dict:
+
+    with _session(stack, token) as session:
+
+        url = urljoin(session.root, USER_URL)
+
+        response = session.post(url)
+
+        if not response.ok:
+            mrich.error("Request failed", url, response.status_code)
+            mrich.print(response.text)
+            return None
+
+        json = response.json()
+
+        return json
 
 
 def site_observations(
