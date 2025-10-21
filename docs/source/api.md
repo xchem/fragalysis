@@ -32,7 +32,7 @@ If you are unsure why you are not seeing material that you think you should be a
 it may be due to your TAS membership. Fragalysis exposes an authenticated
 REST API endpoint that you can use to see your TAS membership.
 
-If you are logged in you can visit `/api/tas_stats`.
+If you are logged in you can visit `/api/user`.
 
 Its response will contain the list of TAS values the authenticator believes are
 assigned to you. It is a simple JSON payload, an example is shown below: -
@@ -40,7 +40,8 @@ assigned to you. It is a simple JSON payload, an example is shown below: -
 ```json
 {
   "user": "abc12345",
-  "version": {
+  "user_id": 1,
+  "authenticator": {
     "kind": "ISPYB",
     "name": "XChem Python FastAPI TAS Authenticator",
     "version": "1.4.4",
@@ -51,9 +52,10 @@ assigned to you. It is a simple JSON payload, an example is shown below: -
 }
 ```
 
-The **user** section displays your user ID.
+The **user** section displays your user and and **user_id** is your numerical ID
+assigned to the Fragalysis (Django) user database.
 
-The **version** section provides details of the authenticator providing the TAS
+The **authenticator** section provides details of the authenticator providing the TAS
 values including its own API URL. Typically the authenticator is only accessible
 to applications from within the deployment cluster.
 
