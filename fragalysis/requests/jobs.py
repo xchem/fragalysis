@@ -3,6 +3,7 @@ from mrich import print
 
 import time
 import pandas as pd
+from pathlib import Path
 from json import JSONDecodeError, dumps
 from urllib.parse import urljoin, quote, unquote
 
@@ -168,7 +169,7 @@ def fragmenstein_placement(
 
             transfer_tasks.append(transfer_dict)
 
-    # MONITOR TASK
+    # MONITOR FILE TRANSFER TASKS
 
     completed = set()
 
@@ -246,13 +247,21 @@ def fragmenstein_placement(
     with mrich.loading("Starting placement jobs..."):
         for i, transfer_dict in enumerate(transfer_tasks):
 
+            # print(transfer_dict)
+
             job_spec = dict(
                 collection="fragmenstein",
                 job="fragmenstein-place-string",
                 version="1.0.0",
                 variables=dict(
-                    protein=transfer_dict["reference_file"],
-                    fragments=list(transfer_dict["inspiration_files"]),
+                    protein=modify_filepath(
+                        transfer_dict["reference_file"],
+                        transfer_dict["transfer_root"],
+                    ),
+                    fragments=[
+                        modify_filepath(p, transfer_dict["transfer_root"])
+                        for p in transfer_dict["inspiration_files"]
+                    ],
                     smiles=list(transfer_dict["smiles_strs"]),
                 ),
             )
@@ -476,3 +485,7 @@ def get_last_session_project_id(
 def clean_filepath(path):
     path = unquote(path)
     return path.split("/media/")[-1]
+
+
+def modify_filepath(path, transfer_root):
+    return str(Path(transfer_root) / Path(path).name)
