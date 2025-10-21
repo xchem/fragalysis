@@ -3,163 +3,6 @@
 
 The list of Fragalysis' REST API endpoints can be found at `<fragalysis url>/api`.
 
-## Target Access Strings
-
-Fragalysis Targets are associated with _proposals_, also referred to as
-**Target Access Strings** (TAS for short). Proposals, and the individuals who are
-assigned to them, are maintained on a Diamond-managed database.
-Fragalysis uses an [Authenticator] service to query the database to enforce rules
-relating to what people can _see_ and contribute to (modify).
-Some proposals are _open_, which means that Targets associated with these are visible
-to everyone, even those who are not logged-in (authenticated).
-`lb18145-1` is one such proposal.
-
-A TAS consists of three items: a two-letter _code_, a proposal _number_,
-and a hyphen followed by a _visit_ (_session number_). It is only valid if all three
-are present. Depending on how it's been configured Fragalysis may also limit the codes
-that can be used, although the use of `lb` and `sw` are commonly permitted.
-
-So, what you see (and what you can edit) is controlled by your proposal membership.
-
-For performance reasons, and because the underlying membership database may not always
-be available, the authenticator caches each user's TAS set after it has been collected.
-The cache, for each user, is refreshed after a few minutes. This approach ensures
-that the authenticator can respond promptly to TAS requests.
-
-### Seeing your TAS set
-
-If you are unsure why you are not seeing material that you think you should be able to,
-it may be due to your TAS membership. Fragalysis exposes an authenticated
-REST API endpoint that you can use to see your TAS membership.
-
-If you are logged in you can visit `/api/tas_stats`.
-
-Its response will contain the list of TAS values the authenticator believes are
-assigned to you. It is a simple JSON payload, an example is shown below: -
-
-```json
-{
-  "user": "abc12345",
-  "version": {
-    "kind": "ISPYB",
-    "name": "XChem Python FastAPI TAS Authenticator",
-    "version": "1.4.4",
-    "location": "http://auth.ta-authenticator.svc"
-  },
-  "ping": "OK",
-  "target_access": ["lb12345-1", "lb56789-2", "lb80745-254"]
-}
-```
-
-The **user** section displays your user ID.
-
-The **version** section provides details of the authenticator providing the TAS
-values including its own API URL. Typically the authenticator is only accessible
-to applications from within the deployment cluster.
-
-The **ping** section reports the state of the connection between the authenticator and
-the underlying databases. This will be `OK` if the authenticator can access the
-database or `Not OK` if it cannot.
-
-The **target_access** section is a list of TAS values assigned to you.
-
-If you are not logged in you can still obtain details of the authenticator,
-and the **ping** status - everything except a listr of TAS values.
-
->   The ISPyB authenticator is just one authenticator that can be deployed.
-    The administrator may have deployed a different authenticator for you stack,
-    so always check the version is what you expect.
-
-### Understanding the authenticator
-
-If you are still unsure about why you are not a member of a particular TAS,
-and you are sure you should be, you can inspect the authenticator, which will
-provide a lot of statistical information relating to its internal operation,
-but also about it's connection to the proposal database.
-
-The authenticator exposes a REST API endpoint to do this, which produces a YAML-like
-text response. You will need to provide an _access key_, which is used to prevent
-unauthorised access.
-
-Assuming you have the key, authentication statistics can be obtained using a **GET**
-from the exposed endpoint. In the following example the key is `4pp4CmJP2wCz2EiGgCctG`
-(which is not the actual key of course - you will need to contact the Fragalysis
-administrators to get the real key). Here we use [httpie] (and `curl`)
-to retrieve the statistics: -
-
-    STATS_KEY=4pp4CmJP2wCz2EiGgCctG
-
-    http https:///ta-authenticator.xchem.diamond.ac.uk X-TAAStatsKey:${STATS_KEY}
-
-    curl https:///ta-authenticator.xchem.diamond.ac.uk -H X-TAAStatsKey:${STATS_KEY}
-
-The response is quite detailed, and many parts of it will only make sense
-if you understand the inner-workings of the authenticator.
-
-The **auth section** provides information about the type (and version) of authenticator
-that's being used: -
-
-```yaml
-auth:
-  kind: ISPYB
-  name: XChem Python FastAPI TAS Authenticator
-  version: 1.4.0
-```
-
-The **code_set section** lists the restricted set of proposal codes that are
-in use. If this list is empty (`[]`) as it is in this example any code is
-permitted by the authenticator: -
-
-```yaml
-code_set: []
-```
-
->   The code set may be further limited within Fragalysis, which has its own
-    additional filter. Typically `lb` and `sw` will be permitted.
-
-The **ping section** indicates the health of the database connection. The database
-is responding correctly if `status` is `OK`. The age of the status can also be seen
-along with the dates and times the status changed. In the following example
-the database connection was last checked `20 seconds` ago, it is reported as `OK`,
-and it has been OK for 2 hours (since `10:34` UTC). Before 10:34 you can assume the
-status (database connection) was not OK.
-
-```yaml
-ping:
-  age: 20 seconds
-  status: OK
-  status_change_age: 2 hours
-  status_change_timestamp: '2025-10-10T10:34:25.537069+00:00'
-```
-
->   While the connection is OK the authenticator can make new proposal queries. If
-    it is not OK the authenticator relies on any pre-collected and cached results.
-    Results are cached for a user, but the database is only queried when the user
-    is actively using Fragalysis.
-
-The **user section** displays simplified results for each user.
-If your user ID is not in the `users -> user_stats` list then proposals have not
-been collected for you. In this example user `abc12345` is associates with 12 TAS
-that were collected from the database at 10:34 (UTC): -
-
-```yaml
-users:
-  user_stats:
-  - username: abc12345
-  - tas_count: 12
-  - collected: '2025-10-10T10:34:25.537069+00:00'
-```
-
-If there are no users known to the authenticator the list will be empty: -
-
-```yaml
-users:
-  user_stats: []
-```
-
-[authenticator]: https://github.com/xchem/fragalysis-ispyb-target-access-authenticator
-[httpie]: https://httpie.io
-
 ## Using endpoints from python scripts
 
 Fragalysis API can be accessed from Python scripts directly but there are a couple of things to look out for. Most of the endpoints require authentication. To obtain the authentication token, first log into Fragalysis and find it from the UI or visit the `api/token` endpoint. Cross-site scripting prevention can also sometimes cause problems. To use the endpoints from python scripts, you need to make sure the authentication token and CSRFtoken are set and correct.
@@ -305,3 +148,161 @@ This endpoint allows downloading target data from Fragalysis. Working with this 
 - static_link: default False. This parameter is ignored.
 - file_url: default '' (empty string). Download previoulsy compiled download. If included, all other parameters are ignored and only the existing zipfile is downloaded
 - trans_matrix_info: default False. Download `neighbourhood_transforms.yaml`, `conformer_site_transforms.yaml` and `reference_structure_transforms.yaml`
+
+### `/api/user`
+
+Fragalysis Targets are associated with _proposals_, also referred to as
+**Target Access Strings** (TAS for short). Proposals, and the individuals who are
+assigned to them, are maintained on a Diamond-managed database.
+Fragalysis uses an [Authenticator] service to query the database to enforce rules
+relating to what people can _see_ and contribute to (modify).
+Some proposals are _open_, which means that Targets associated with these are visible
+to everyone, even those who are not logged-in (authenticated).
+`lb18145-1` is one such proposal.
+
+A TAS consists of three items: a two-letter _code_, a proposal _number_,
+and a hyphen followed by a _visit_ (_session number_). It is only valid if all three
+are present. Depending on how it's been configured Fragalysis may also limit the codes
+that can be used, although the use of `lb` and `sw` are commonly permitted.
+
+So, what you see (and what you can edit) is controlled by your proposal membership.
+
+For performance reasons, and because the underlying membership database may not always
+be available, the authenticator caches each user's TAS set after it has been collected.
+The cache, for each user, is refreshed after a few minutes. This approach ensures
+that the authenticator can respond promptly to TAS requests.
+
+#### Seeing your TAS set
+
+If you are unsure why you are not seeing material that you think you should be able to,
+it may be due to your TAS membership. Fragalysis exposes an authenticated
+REST API endpoint that you can use to see your TAS membership.
+
+If you are logged in you can visit `/api/user`.
+
+Its response will contain the list of TAS values the authenticator believes are
+assigned to you. It is a simple JSON payload, an example is shown below: -
+
+```json
+{
+  "user": "abc12345",
+  "user_id": "2",
+  "version": {
+    "kind": "ISPYB",
+    "name": "XChem Python FastAPI TAS Authenticator",
+    "version": "1.4.4",
+    "location": "http://auth.ta-authenticator.svc"
+  },
+  "ping": "OK",
+  "target_access": ["lb12345-1", "lb56789-2", "lb80745-254"]
+}
+```
+
+The **user** section displays your user ID.
+
+The **version** section provides details of the authenticator providing the TAS
+values including its own API URL. Typically the authenticator is only accessible
+to applications from within the deployment cluster.
+
+The **ping** section reports the state of the connection between the authenticator and
+the underlying databases. This will be `OK` if the authenticator can access the
+database or `Not OK` if it cannot.
+
+The **target_access** section is a list of TAS values assigned to you.
+
+If you are not logged in you can still obtain details of the authenticator,
+and the **ping** status - everything except a listr of TAS values.
+
+>   The ISPyB authenticator is just one authenticator that can be deployed.
+    The administrator may have deployed a different authenticator for you stack,
+    so always check the version is what you expect.
+
+#### Understanding the authenticator
+
+If you are still unsure about why you are not a member of a particular TAS,
+and you are sure you should be, you can inspect the authenticator, which will
+provide a lot of statistical information relating to its internal operation,
+but also about it's connection to the proposal database.
+
+The authenticator exposes a REST API endpoint to do this, which produces a YAML-like
+text response. You will need to provide an _access key_, which is used to prevent
+unauthorised access.
+
+Assuming you have the key, authentication statistics can be obtained using a **GET**
+from the exposed endpoint. In the following example the key is `4pp4CmJP2wCz2EiGgCctG`
+(which is not the actual key of course - you will need to contact the Fragalysis
+administrators to get the real key). Here we use [httpie] (and `curl`)
+to retrieve the statistics: -
+
+    STATS_KEY=4pp4CmJP2wCz2EiGgCctG
+
+    http https:///ta-authenticator.xchem.diamond.ac.uk X-TAAStatsKey:${STATS_KEY}
+
+    curl https:///ta-authenticator.xchem.diamond.ac.uk -H X-TAAStatsKey:${STATS_KEY}
+
+The response is quite detailed, and many parts of it will only make sense
+if you understand the inner-workings of the authenticator.
+
+The **auth section** provides information about the type (and version) of authenticator
+that's being used: -
+
+```yaml
+auth:
+  kind: ISPYB
+  name: XChem Python FastAPI TAS Authenticator
+  version: 1.4.0
+```
+
+The **code_set section** lists the restricted set of proposal codes that are
+in use. If this list is empty (`[]`) as it is in this example any code is
+permitted by the authenticator: -
+
+```yaml
+code_set: []
+```
+
+>   The code set may be further limited within Fragalysis, which has its own
+    additional filter. Typically `lb` and `sw` will be permitted.
+
+The **ping section** indicates the health of the database connection. The database
+is responding correctly if `status` is `OK`. The age of the status can also be seen
+along with the dates and times the status changed. In the following example
+the database connection was last checked `20 seconds` ago, it is reported as `OK`,
+and it has been OK for 2 hours (since `10:34` UTC). Before 10:34 you can assume the
+status (database connection) was not OK.
+
+```yaml
+ping:
+  age: 20 seconds
+  status: OK
+  status_change_age: 2 hours
+  status_change_timestamp: '2025-10-10T10:34:25.537069+00:00'
+```
+
+>   While the connection is OK the authenticator can make new proposal queries. If
+    it is not OK the authenticator relies on any pre-collected and cached results.
+    Results are cached for a user, but the database is only queried when the user
+    is actively using Fragalysis.
+
+The **user section** displays simplified results for each user.
+If your user ID is not in the `users -> user_stats` list then proposals have not
+been collected for you. In this example user `abc12345` is associates with 12 TAS
+that were collected from the database at 10:34 (UTC): -
+
+```yaml
+users:
+  user_stats:
+  - username: abc12345
+  - tas_count: 12
+  - collected: '2025-10-10T10:34:25.537069+00:00'
+```
+
+If there are no users known to the authenticator the list will be empty: -
+
+```yaml
+users:
+  user_stats: []
+```
+
+[authenticator]: https://github.com/xchem/fragalysis-ispyb-target-access-authenticator
+[httpie]: https://httpie.io
