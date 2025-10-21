@@ -1,14 +1,20 @@
 import re
 import time
 import mrich
+
 from pathlib import Path
+from json import JSONDecodeError
 from urllib.parse import urljoin
 
 from .session import _session
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL
 
 
-def target_list(stack: str = "production", token: str | None = None) -> list[dict]:
+def target_list(
+    stack: str = "production",
+    token: str | None = None,
+    return_project_data: bool = False,
+) -> list[dict]:
     """Request a list of target dictionaries from a Fragalysis deployment
 
     :param stack: shorthand or URL of Fragalysis deployment, defaults to "production"
@@ -44,6 +50,9 @@ def target_list(stack: str = "production", token: str | None = None) -> list[dic
         targets = []
         for d in targets_data["results"]:
             targets.append((d["id"], d["title"], projects[d["project"]]))
+
+        if return_project_data:
+            return targets, projects
 
         return targets
 
@@ -121,7 +130,7 @@ def download_target(
 
                     started = status_json.get("started", False)
                     finished = status_json.get("finished", False)
-                    
+
                     if finished:
                         break
 
@@ -175,7 +184,9 @@ def download_target(
 
                     import tarfile
 
-                    target_dir = destination / Path(file_url).name.removesuffix(".tar.gz")
+                    target_dir = destination / Path(file_url).name.removesuffix(
+                        ".tar.gz"
+                    )
 
                     target_dir.mkdir(exist_ok=True)
 

@@ -1,13 +1,13 @@
-
 import mrich
 import ipywidgets
 import subprocess
 
-TEMPLATE_SOURCE = "/home/code/templates" # production location
+TEMPLATE_SOURCE = "/home/code/templates"  # production location
 # TEMPLATE_SOURCE = "/home/jovyan/templates" # dev location
 
-FRAGALYSIS_SOURCE = "/home/code/fragalysis" # production location
+FRAGALYSIS_SOURCE = "/home/code/fragalysis"  # production location
 # FRAGALYSIS_SOURCE = "/home/jovyan/fragalysis" # dev location
+
 
 def templates():
     """Homepage UI with buttons for managing template notebooks"""
@@ -27,24 +27,23 @@ def templates():
     widgets = []
     for name, description, icon in TEMPLATE_BUTTONS:
         w = ipywidgets.Button(
-            description=description,
-            icon=icon,
-            layout={'width': 'max-content'}
+            description=description, icon=icon, layout={"width": "max-content"}
         )
 
         def button_func(button, template_name=name):
             with output:
                 _copy_template(template_name)
-    
+
         w.on_click(button_func)
-        
+
         widgets.append(w)
 
     ui_1.children = widgets
-    
+
     ui_main.children = [ui_1, output]
 
     display(ui_main)
+
 
 def _copy_template(name, destination="/home/jovyan/"):
 
@@ -56,6 +55,7 @@ def _copy_template(name, destination="/home/jovyan/"):
     ]
 
     subprocess.run(args)
+
 
 def manage():
     """Homepage UI with buttons for managing git repos"""
@@ -76,22 +76,23 @@ def manage():
         w = ipywidgets.Button(
             description=description,
             # icon=icon,
-            layout={'width': 'max-content'}
+            layout={"width": "max-content"},
         )
 
         def button_func(button, repo_path=path):
             with output:
                 _update_repo(repo_path)
-    
+
         w.on_click(button_func)
-        
+
         widgets.append(w)
 
     ui_1.children = widgets
-    
+
     ui_main.children = [ui_1, output]
 
     display(ui_main)
+
 
 def _update_repo(path):
     cmd = f"cd {path} && git pull"
