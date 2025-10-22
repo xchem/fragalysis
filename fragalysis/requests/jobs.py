@@ -34,6 +34,7 @@ def fragmenstein_placement(
     tas: str,
     stack: str = "production",
     token: str | None = None,
+    num_repeats: int = 1,
 ):
     """Pass a list of dictionaries with placement tasks:
 
@@ -51,8 +52,10 @@ def fragmenstein_placement(
     mrich.var("tas", tas)
     mrich.var("stack", stack)
     mrich.var("#placements", len(placements))
+    mrich.var("#repeats", num_repeats)
 
-    author_id = user_info(stack=stack, token=token)["user_id"]
+    author_dict = user_info(stack=stack, token=token)
+    author_id = author_dict["user_id"]
 
     if author_id == 1:
         mrich.error("Unauthenticated user, is token valid?")
@@ -263,6 +266,8 @@ def fragmenstein_placement(
                         for p in transfer_dict["inspiration_files"]
                     ],
                     smiles=list(transfer_dict["smiles_strs"]),
+                    outfile=f"fragalysis-jobs/{author_dict['user']}/placed.sdf",
+                    count=num_repeats,
                 ),
             )
 
@@ -286,11 +291,14 @@ def fragmenstein_placement(
                 if not response.ok:
                     mrich.error("Request failed", url, response.status_code)
                     mrich.print(response.text)
-                return None
+                    return None
 
-            json = response.json()
+                json = response.json()
 
-            print(json)
+                transfer_dict["squonk_url_ext"] = json["squonk_url_ext"]
+                transfer_dict["job_request_id"] = json["id"]
+
+                mrich.success("Job request submitted", json["id"], json["squonk_url_ext"])
 
     # MONITOR JOB
 
@@ -313,7 +321,7 @@ def user_info(
 
         try:
             json = response.json()
-        except JSONDecodeError:
+        except Exception as e:
             mrich.error("Can't get user info, is token valid?")
             return None
 
