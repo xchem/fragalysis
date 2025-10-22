@@ -5,12 +5,12 @@ from ..requests.download import target_list, download_target
 import re
 
 
-def download():
+def download(destination: str = "."):
     """UI for downloading targets from fragalysis"""
-    _download_ui_1()
+    _download_ui_1(destination=destination)
 
 
-def _download_ui_1():
+def _download_ui_1(destination: str = "."):
     """Create widgets to request target list"""
 
     mrich.h3("download target")
@@ -34,7 +34,12 @@ def _download_ui_1():
 
     def button_func(button):
         with output:
-            _download_ui_2(ui_main=ui_main, token=w_token.value, stack=w_stack.value)
+            _download_ui_2(
+                destination=destination,
+                ui_main=ui_main,
+                token=w_token.value,
+                stack=w_stack.value,
+            )
 
     b_get_targets.on_click(button_func)
 
@@ -43,7 +48,12 @@ def _download_ui_1():
     display(ui_main)
 
 
-def _download_ui_2(ui_main, stack: str, token: str | None = None):
+def _download_ui_2(
+    ui_main,
+    stack: str,
+    token: str | None = None,
+    destination: str = ".",
+):
     """widgets to request target download"""
 
     output = ipywidgets.Output()
@@ -60,7 +70,7 @@ def _download_ui_2(ui_main, stack: str, token: str | None = None):
         description="Target",
     )
 
-    w_destination = ipywidgets.Text(description="Destination", value="..")
+    w_destination = ipywidgets.Text(description="Destination", value=destination)
 
     b_download = ipywidgets.Button(
         description="Download",
