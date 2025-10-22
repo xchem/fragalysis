@@ -63,6 +63,17 @@ def download_target(
     stack: str = "production",
     token: str | None = None,
     destination: str = ".",
+    metadata_file: bool = True,
+    combined_sdf: bool = True,
+    compound_set_sdfs: bool = True,
+    unaligned_pdbs: bool = False,
+    ligand_cifs: bool = False,
+    event_maps: bool = False,
+    inspection_maps: bool = False,
+    residual_maps: bool = False,
+    real_space_maps: bool = False,
+    transformation_files: bool = False,
+    reflections_files: bool = False,
 ) -> None:
     """Request a target download from a Fragalysis deployment
 
@@ -71,25 +82,38 @@ def download_target(
     :param stack: shorthand or URL of Fragalysis deployment, defaults to "production"
     :param token: optional authentication token
     :param destination: directory within which to place the download, defaults to "." (current working directory)
+    :param metadata_file: Download metadata.csv?
+    :param combined_sdf: Download single SDF of all ligands?
+    :param compound_set_sdfs: Download RHS / computed ligand SDFs?
+    :param unaligned_pdbs: Download coordinate files (not re-aligned) (.pdb)?
+    :param ligand_cifs: Download ligand definitions and geometry restrains (.cif)?
+    :param event_maps: Download PanDDA Event maps - primary evidence?
+    :param inspection_maps: Download conventional inspection maps ("2FoFc")?
+    :param residual_maps: Download conventional residual maps ("FoFc")?
+    :param real_space_maps: Real-space map files (VERY BIG!) (.map)?
+    :param transformation_files: Download transformations applied for alignments?
+    :param reflections_files: Download reflections and map coefficients (.mtz)?
+
     """
 
     payload = {
-        "all_aligned_structures": True,
-        "cif_info": False,
-        "diff_file": False,
-        "event_file": False,
-        "file_url": "",
-        "map_info": False,
-        "metadata_info": True,
-        "mtz_info": False,
-        "pdb_info": False,
-        "proteins": "",
-        "sigmaa_file": False,
-        "single_sdf_file": True,
-        "static_link": False,
         "target_name": name,
         "target_access_string": tas,
-        "trans_matrix_info": False,
+        "all_aligned_structures": True,
+        "cif_info": ligand_cifs,
+        "diff_file": residual_maps,
+        "event_file": event_maps,
+        "map_info": real_space_maps,
+        "metadata_info": metadata_file,
+        "mtz_info": reflections_files,
+        "pdb_info": unaligned_pdbs,
+        "sigmaa_file": inspection_maps,
+        "trans_matrix_info": transformation_files,
+        "single_sdf_file": combined_sdf,
+        "compound_sets": compound_set_sdfs,
+        "file_url": "",
+        "proteins": "",
+        "static_link": False,
     }
 
     destination = Path(destination)
