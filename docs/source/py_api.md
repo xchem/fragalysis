@@ -38,11 +38,11 @@ download_target(name=target_name, tas=target_access_string, token=token, stack="
 The `token` keyword can be ommitted the target is public, `stack` can be either "production", "staging" or the URL of another Fragalysis deployment, tas is the "Target Access String" or DLS proposal-session string (e.g. `lb32627-66`), the destination can be any path and is "." by default.
 
 ```{note}
-The Fragalysis frontend offers more options for target download than this API. Contributions to update the python API for feature parity are much appreciated. 
+The Fragalysis frontend may offer more options for target download than this API. Contributions to update the python API for feature parity are much appreciated. 
 
 The `download_target` method which will need updating is in https://github.com/xchem/fragalysis/blob/main/fragalysis/requests/download.py
 
-The available POST request parameters to `/api/download_structures` can be seen in the JavaScript code for the frontend https://github.com/xchem/fragalysis-frontend/blob/staging/js/components/snapshot/modals/downloadStructuresDialog.js (see variables SUBSET_SELECTION, MAP_FILES, CRYSTALLOGRAPHIC_FILES, PERMALINK_OPTIONS, OTHERS)
+The available POST request parameters to `/api/download_structures` can be seen in the JavaScript code for the frontend https://github.com/xchem/fragalysis-frontend/blob/staging/js/components/snapshot/modals/downloadStructuresDialog.js (see variables MAP_FILES, CRYSTALLOGRAPHIC_FILES, PERMALINK_OPTIONS, OTHERS)
 
 Relevant developer contacts on github are @mwinokan, @kaliif, and @boriskovar-m2ms.
 ```
