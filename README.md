@@ -65,6 +65,9 @@ as an interface to ISPyB, yielding Target Access Strings based on username
 [fragalysis-mock-target-access-authenticator] : A "mock" ISPyB authenticator
 (providing results based on a config file)
 
+[fragalysis-rdkit-cartridge-pgvector-debian] : An extension to the underlying database
+image (informaticsmatters/rdkit-cartridge-debian) that adds PG-Vector utilities
+
 [fragalysis-stack-kubernetes] : Ansible playbooks for application deployment and management
 
 [fragalysis-stack-behaviour-tests] : Basic gherkin-based behaviour tests for the stack API
@@ -131,6 +134,7 @@ typically kubernetes or slurm: -
 [fragalysis-mock-target-access-authenticator]: https://github.com/xchem/fragalysis-mock-target-access-authenticator
 [fragalysis-stack-kubernetes]: https://github.com/xchem/fragalysis-stack-kubernetes
 [fragalysis-ispyb-target-access-authenticator]: https://github.com/xchem/fragalysis-ispyb-target-access-authenticator
+[fragalysis-rdkit-cartridge-pgvector-debian]: https://github.com/xchem/fragalysis-rdkit-cartridge-pgvector-debian
 [fragalysis-api]: https://github.com/xchem/fragalysis-api
 [fragalysis-backend]: https://github.com/xchem/fragalysis-backend
 [fragalysis-frontend]: https://github.com/xchem/fragalysis-frontend

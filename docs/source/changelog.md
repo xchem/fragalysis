@@ -15,6 +15,8 @@
 
 ## Release Notes
 
+- [2025.10.2](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.2)
+	* _IMPROVEMENT_ [New user/authentication information endpoint](https://github.com/m2ms/fragalysis-frontend/issues/1452)
 - [2025.10.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.1)
 	* _IMPROVEMENT_ [Automatically restore missing structure files](https://github.com/m2ms/fragalysis-frontend/issues/1609)
 	* _IMPROVEMENT_ [More robust CSV formatting in downloads](https://github.com/m2ms/fragalysis-frontend/issues/1910)
