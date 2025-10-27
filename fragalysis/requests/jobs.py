@@ -16,6 +16,9 @@ from .urls import (
     SITE_OBSERVATIONS_URL,
     TASK_STATUS_URL,
     USER_URL,
+    DATA_MANAGERS,
+    SQUONK_DM_TASK_URL,
+    SQUONK_DM_INSTANCE_URL,
 )
 
 """
@@ -213,40 +216,6 @@ def fragmenstein_placement(
 
     ### START ALL THE PLACEMENT JOBS
 
-    """Use fragmenstein-place-file job: 
-    
-    https://github.com/InformaticsMatters/squonk2-fragmenstein/blob/00e7ee93f659b80f175577d534cb5420b23f7dce/data-manager/fragmenstein.yaml#L180
-
-    - fragments (inspirations)
-    - protein (reference)
-    - smiles (list of smiles strings)
-
-    job-spec must be valid JSON:
-
-    "squonk_job_spec": "{
-        "collection":"fragmenstein",
-        "job":"fragmenstein-combine",
-        "version":"1.0.0",
-        "variables":{
-            "fragments":[
-                    "fragalysis-files/irnh/5r7y_A_1001_1_7gbd%2BA%2B404%2B1_ligand.mol",
-                    "fragalysis-files/irnh/5r7z_A_404_1_7gbd%2BA%2B404%2B1_ligand.mol"
-                ],
-            "count":5,
-            "fragIdField":"_Name",
-            "keepHydrogens":false,
-            "outfile":"fragalysis-jobs/spf57946/fragmenstein-combine-1750410737796/merged.sdf",
-            "proteinFieldName":"ref_pdb",
-            "proteinFieldValue":"5r7z_A_404_1_7gbd%2BA%2B404%2B1_apo-desolv.pdb",
-            "smilesFieldName":"original SMILES",
-            "protein":"fragalysis-files/irnh/5r7z_A_404_1_7gbd%2BA%2B404%2B1_apo-desolv.pdb"
-        }
-    }"
-    
-    """
-
-    placement_tasks = []
-
     with mrich.loading("Starting placement jobs..."):
         for i, transfer_dict in enumerate(transfer_tasks):
 
@@ -284,8 +253,6 @@ def fragmenstein_placement(
 
                 url = urljoin(session.root, JOB_REQUEST_URL)
 
-                print(payload)
-
                 response = session.post(url, data=payload)
 
                 if not response.ok:
@@ -297,10 +264,74 @@ def fragmenstein_placement(
 
                 transfer_dict["squonk_url_ext"] = json["squonk_url_ext"]
                 transfer_dict["job_request_id"] = json["id"]
+                transfer_dict["squonk_instance"] = json["squonk_url_ext"].split(
+                    "instance/"
+                )[-1]
 
-                mrich.success("Job request submitted", json["id"], json["squonk_url_ext"])
+                mrich.success(
+                    "Job request submitted", json["id"], json["squonk_url_ext"]
+                )
 
     # MONITOR JOB
+
+    completed = set()
+
+    with mrich.clock("Waiting for placement jobs to complete..."):
+        with _session(stack=stack, token=token) as session:
+            for i in range(100_000):
+
+                if len(completed) == len(transfer_tasks):
+                    break
+
+                for task in transfer_tasks:
+
+                    instance = task["squonk_instance"]
+
+                    if instance in completed:
+                        continue
+
+                    status_url = urljoin(
+                        DATA_MANAGERS[stack], SQUONK_DM_INSTANCE_URL + instance
+                    )
+
+                    status = session.get(status_url)
+
+                    try:
+                        status_json = status.json()
+                    except JSONDecodeError:
+                        continue
+
+                    squonk_task_ids = [d["id"] for d in status_json["tasks"]]
+
+                    if len(squonk_task_ids) != 0:
+                        raise ValueError("Wrong number of squonk tasks")
+
+                    task["squonk_task"] = squonk_task_ids[0]
+
+                    status_url = urljoin(
+                        DATA_MANAGERS[stack], SQUONK_DM_TASK_URL + task["squonk_task"]
+                    )
+
+                    status = session.get(status_url)
+
+                    try:
+                        status_json = status.json()
+                    except JSONDecodeError:
+                        continue
+
+                    finished = status["done"]
+
+                    if finished:
+                        mrich.success("Placement job complete", instance)
+                        completed.add(instance)
+
+                time.sleep(0.5)
+
+            else:
+                mrich.error("Timed out")
+                raise ValueError
+
+    # GET THE OUTPUT FILES
 
 
 def user_info(
