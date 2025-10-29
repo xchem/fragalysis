@@ -428,7 +428,6 @@ def knitwork(
             session_project_id=session_project_dict["id"],
             target_id=target_id,
             stack=stack,
-            protein_files=None,
             compound_files=ligand_files,
         )
 
@@ -439,7 +438,6 @@ def knitwork(
         transfer_dict["snapshot"] = snapshot_dict
         transfer_dict["observations"] = observations
         transfer_dict["ligand_files"] = ligand_files
-        transfer_dict["protein_files"] = protein_files
 
     # MONITOR FILE TRANSFER
 
