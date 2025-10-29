@@ -1,4 +1,3 @@
-import mrich
 from urllib.parse import urljoin
 from pathlib import Path
 from .urls import STACKS, LANDING_PAGE_URL
