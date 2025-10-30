@@ -66,6 +66,7 @@ def download_target(
     metadata_file: bool = True,
     combined_sdf: bool = True,
     compound_set_sdfs: bool = True,
+    soakdb_files: bool = True,
     unaligned_pdbs: bool = False,
     ligand_cifs: bool = False,
     event_maps: bool = False,
@@ -85,6 +86,7 @@ def download_target(
     :param metadata_file: Download metadata.csv?
     :param combined_sdf: Download single SDF of all ligands?
     :param compound_set_sdfs: Download RHS / computed ligand SDFs?
+    :param soakdb_files: Download SoakDB CSV/sqlite files?
     :param unaligned_pdbs: Download coordinate files (not re-aligned) (.pdb)?
     :param ligand_cifs: Download ligand definitions and geometry restrains (.cif)?
     :param event_maps: Download PanDDA Event maps - primary evidence?
@@ -114,6 +116,7 @@ def download_target(
         "file_url": "",
         "proteins": "",
         "static_link": False,
+        "soakdb_files": soakdb_files,
     }
 
     destination = Path(destination)
