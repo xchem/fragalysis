@@ -15,6 +15,15 @@
 
 ## Release Notes
 
+- [2025.10.3](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.3)
+	* _FEATURE_ [Filtering by geometric coordinates](https://github.com/m2ms/fragalysis-frontend/issues/1821)
+	* _IMPROVEMENT_ [More options to download endpoint (e.g. sqlite files)](https://github.com/m2ms/fragalysis-frontend/issues/1932)
+	* _BUG_ [Restore missing snapshot thumbnails](https://github.com/m2ms/fragalysis-frontend/issues/1936)
+	* _BUG_ [More reliable downloads](https://github.com/m2ms/fragalysis-frontend/issues/1908)
+	* _BUG_ [Fix direct navigation to snapshots](https://github.com/m2ms/fragalysis-frontend/issues/1912)
+	* _BUG_ [Incorrect ligand file path handling in target loader](https://github.com/m2ms/fragalysis-frontend/issues/1935)
+	* _BUG_ [Squonk file transfer fails if no proteins supplied](https://github.com/m2ms/fragalysis-frontend/issues/1934)
+- 1908 [Mpro download fails with 403](https://github.com/m2ms/fragalysis-frontend/issues/1908)
 - [2025.10.2](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.2)
 	* _IMPROVEMENT_ [New user/authentication information endpoint](https://github.com/m2ms/fragalysis-frontend/issues/1452)
 - [2025.10.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.1)
