@@ -1,4 +1,3 @@
-
 import mrich
 
 import time
@@ -12,12 +11,13 @@ from .urls import TASK_STATUS_URL, JOB_REQUEST_URL
 from .squonk import DATA_MANAGERS, SQUONK_DM_INSTANCE_URL
 
 from .jobs import (
-    clean_filepath, 
-    modify_filepath, 
-    create_session_project, 
-    create_snapshot, 
+    clean_filepath,
+    modify_filepath,
+    create_session_project,
+    create_snapshot,
     transfer_snapshot,
 )
+
 
 def knitwork(
     observations: list[str],
@@ -194,5 +194,7 @@ def knitwork(
             mrich.success("Job request submitted", json["id"], json["squonk_url_ext"])
 
     # MONITOR JOB
+
+    return urljoin(DATA_MANAGERS[stack], json["squonk_url_ext"])
 
     # GET OUTPUTS
