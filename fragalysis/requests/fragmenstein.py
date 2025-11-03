@@ -330,8 +330,12 @@ def fragmenstein_combine(
     stack: str = "production",
     token: str | None = None,
     num_repeats: int = 1,
+    multi: bool = True,
+    min_combine: int = 2,
+    max_combine: int = 3,
+    max_distance: float = 1.5,
 ):
-    """Run Fragmenstein combine on provided observation names"""
+    """Run Fragmenstein combine on provided observation names, or subset pairs/triples if multi is selected."""
 
     from .download import target_list
 
@@ -468,30 +472,55 @@ def fragmenstein_combine(
 
     with mrich.loading("Starting fragmenstein job..."):
 
-        job_spec = dict(
-            collection="fragmenstein",
-            job="fragmenstein-combine",
-            version="1.0.0",
-            variables=dict(
-                protein=modify_filepath(
-                    transfer_dict["protein_files"][0],
-                    transfer_dict["transfer_root"],
+        if multi:
+
+            job_spec = dict(
+                collection="fragmenstein",
+                job="fragmenstein-combine-multi",
+                version="1.0.0",
+                variables=dict(
+                    protein=modify_filepath(
+                        transfer_dict["protein_files"][0],
+                        transfer_dict["transfer_root"],
+                    ),
+                    fragments=[
+                        modify_filepath(p, transfer_dict["transfer_root"])
+                        for p in transfer_dict["ligand_files"]
+                    ],
+                    outfile=f"fragalysis-jobs/{author_dict['user']}/merged.sdf",
+                    count=num_repeats,
+                    minNum=min_combine,
+                    maxNum=max_combine,
+                    maxDist=max_distance,
                 ),
-                fragments=[
-                    modify_filepath(p, transfer_dict["transfer_root"])
-                    for p in transfer_dict["ligand_files"]
-                ],
-                outfile=f"fragalysis-jobs/{author_dict['user']}/merged.sdf",
-                count=num_repeats,
-            ),
-        )
+            )
+
+        else:
+
+            job_spec = dict(
+                collection="fragmenstein",
+                job="fragmenstein-combine",
+                version="1.0.0",
+                variables=dict(
+                    protein=modify_filepath(
+                        transfer_dict["protein_files"][0],
+                        transfer_dict["transfer_root"],
+                    ),
+                    fragments=[
+                        modify_filepath(p, transfer_dict["transfer_root"])
+                        for p in transfer_dict["ligand_files"]
+                    ],
+                    outfile=f"fragalysis-jobs/{author_dict['user']}/merged.sdf",
+                    count=num_repeats,
+                ),
+            )
 
         payload = dict(
             access=project_id,
             target=target_id,
             snapshot=transfer_dict["snapshot"]["id"],
             session_project=transfer_dict["session_project"]["id"],
-            squonk_job_name=f"placement-{i+1}",
+            squonk_job_name=f"{target_name} fragmenstein-merge",  # this does not end up in squonk...
             squonk_job_spec=dumps(job_spec),
         )
 
@@ -516,8 +545,4 @@ def fragmenstein_combine(
 
             mrich.success("Job request submitted", json["id"], json["squonk_url_ext"])
 
-    # MONITOR JOB
-
     return urljoin(DATA_MANAGERS[stack], json["squonk_url_ext"])
-
-    # GET OUTPUTS
