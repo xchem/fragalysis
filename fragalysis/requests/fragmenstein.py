@@ -207,6 +207,12 @@ def fragmenstein_place(
     with mrich.loading("Starting placement jobs..."):
         for i, transfer_dict in enumerate(transfer_tasks):
 
+            project_directory = transfer_dict["transfer_root"]
+            mrich.var("project_directory", project_directory)
+
+            output_file = f"{project_directory}/placed.sdf"
+            mrich.var("output_file", output_file)
+
             job_spec = dict(
                 collection="fragmenstein",
                 job="fragmenstein-place-string",
@@ -214,14 +220,14 @@ def fragmenstein_place(
                 variables=dict(
                     protein=modify_filepath(
                         transfer_dict["reference_file"],
-                        transfer_dict["transfer_root"],
+                        project_directory,
                     ),
                     fragments=[
-                        modify_filepath(p, transfer_dict["transfer_root"])
+                        modify_filepath(p, project_directory)
                         for p in transfer_dict["inspiration_files"]
                     ],
                     smiles=list(transfer_dict["smiles_strs"]),
-                    outfile=f"fragalysis-jobs/{author_dict['user']}/placed.sdf",
+                    outfile=output_file,
                     count=num_repeats,
                 ),
             )
