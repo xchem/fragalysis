@@ -203,6 +203,9 @@ def get_file(
 
     DmApi.set_api_url(DM_API_URLS[stack])
 
+    if not path.startswith("/"):
+        path = "/" + path
+
     path = Path(path)
     parent = str(path.parent)
     file = path.name
