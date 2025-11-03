@@ -207,8 +207,6 @@ def fragmenstein_place(
     with mrich.loading("Starting placement jobs..."):
         for i, transfer_dict in enumerate(transfer_tasks):
 
-            # print(transfer_dict)
-
             job_spec = dict(
                 collection="fragmenstein",
                 job="fragmenstein-place-string",
@@ -318,8 +316,6 @@ def fragmenstein_place(
             else:
                 mrich.error("Timed out")
                 raise ValueError
-
-    # GET THE OUTPUT FILES
 
 
 def fragmenstein_combine(
@@ -472,48 +468,36 @@ def fragmenstein_combine(
 
     with mrich.loading("Starting fragmenstein job..."):
 
+        project_directory = transfer_dict["transfer_root"]
+        mrich.var("project_directory", project_directory)
+
+        output_file = f"{project_directory}/merged.sdf"
+        mrich.var("output_file", output_file)
+
+        job_spec = dict(
+            collection="fragmenstein",
+            version="1.0.0",
+            variables=dict(
+                protein=modify_filepath(
+                    transfer_dict["protein_files"][0],
+                    project_directory,
+                ),
+                fragments=[
+                    modify_filepath(p, project_directory)
+                    for p in transfer_dict["ligand_files"]
+                ],
+                outfile=output_file,
+                count=num_repeats,
+            ),
+        )
+
         if multi:
-
-            job_spec = dict(
-                collection="fragmenstein",
-                job="fragmenstein-combine-multi",
-                version="1.0.0",
-                variables=dict(
-                    protein=modify_filepath(
-                        transfer_dict["protein_files"][0],
-                        transfer_dict["transfer_root"],
-                    ),
-                    fragments=[
-                        modify_filepath(p, transfer_dict["transfer_root"])
-                        for p in transfer_dict["ligand_files"]
-                    ],
-                    outfile=f"fragalysis-jobs/{author_dict['user']}/merged.sdf",
-                    count=num_repeats,
-                    minNum=min_combine,
-                    maxNum=max_combine,
-                    maxDist=max_distance,
-                ),
-            )
-
+            job_spec["job"] = "fragmenstein-combine-multi"
+            job_spec["variables"]["minNum"] = min_combine
+            job_spec["variables"]["maxNum"] = max_combine
+            job_spec["variables"]["maxDist"] = max_distance
         else:
-
-            job_spec = dict(
-                collection="fragmenstein",
-                job="fragmenstein-combine",
-                version="1.0.0",
-                variables=dict(
-                    protein=modify_filepath(
-                        transfer_dict["protein_files"][0],
-                        transfer_dict["transfer_root"],
-                    ),
-                    fragments=[
-                        modify_filepath(p, transfer_dict["transfer_root"])
-                        for p in transfer_dict["ligand_files"]
-                    ],
-                    outfile=f"fragalysis-jobs/{author_dict['user']}/merged.sdf",
-                    count=num_repeats,
-                ),
-            )
+            job_spec["job"] = "fragmenstein-combine"
 
         payload = dict(
             access=project_id,
@@ -543,6 +527,8 @@ def fragmenstein_combine(
                 "instance/"
             )[-1]
 
-            mrich.success("Job request submitted", json["id"], json["squonk_url_ext"])
+            mrich.success("Job request submitted", transfer_dict["squonk_instance"])
+
+            mrich.var("instance_id", transfer_dict["squonk_instance"])
 
     return urljoin(DATA_MANAGERS[stack], json["squonk_url_ext"])
