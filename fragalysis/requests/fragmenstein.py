@@ -264,65 +264,6 @@ def fragmenstein_place(
                     "Job request submitted", json["id"], json["squonk_url_ext"]
                 )
 
-    # MONITOR JOB
-
-    completed = set()
-
-    with mrich.clock("Waiting for placement jobs to complete..."):
-        with _session(stack=stack, token=token) as session:
-            for i in range(100_000):
-
-                if len(completed) == len(transfer_tasks):
-                    break
-
-                for task in transfer_tasks:
-
-                    instance = task["squonk_instance"]
-
-                    if instance in completed:
-                        continue
-
-                    status_url = urljoin(
-                        DATA_MANAGERS[stack], SQUONK_DM_INSTANCE_URL + instance
-                    )
-
-                    status = session.get(status_url)
-
-                    try:
-                        status_json = status.json()
-                    except JSONDecodeError:
-                        continue
-
-                    squonk_task_ids = [d["id"] for d in status_json["tasks"]]
-
-                    if len(squonk_task_ids) != 0:
-                        raise ValueError("Wrong number of squonk tasks")
-
-                    task["squonk_task"] = squonk_task_ids[0]
-
-                    status_url = urljoin(
-                        DATA_MANAGERS[stack], SQUONK_DM_TASK_URL + task["squonk_task"]
-                    )
-
-                    status = session.get(status_url)
-
-                    try:
-                        status_json = status.json()
-                    except JSONDecodeError:
-                        continue
-
-                    finished = status["done"]
-
-                    if finished:
-                        mrich.success("Placement job complete", instance)
-                        completed.add(instance)
-
-                time.sleep(0.5)
-
-            else:
-                mrich.error("Timed out")
-                raise ValueError
-
 
 def fragmenstein_combine(
     observations: list[str],

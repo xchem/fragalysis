@@ -80,7 +80,6 @@ def knitwork(
     with mrich.loading("Requesting file transfer..."):
 
         ligand_files = set()
-
         for observation in observations:
             file = site_observations_df.loc[observation, "ligand_mol"]
             file = clean_filepath(file)
@@ -157,6 +156,9 @@ def knitwork(
 
     with mrich.loading("Starting knitwork job..."):
 
+        project_directory = transfer_dict["transfer_root"]
+        mrich.var("project_directory", project_directory)
+
         job_spec = dict(
             collection="knitwork",
             job="knitwork",
@@ -170,6 +172,12 @@ def knitwork(
             session_project=transfer_dict["session_project"]["id"],
             squonk_job_name=f"placement-{i+1}",
             squonk_job_spec=dumps(job_spec),
+            variables=dict(
+                ligands=[
+                    modify_filepath(p, project_directory)
+                    for p in transfer_dict["ligand_files"]
+                ],
+            ),
         )
 
         with _session(stack=stack, token=token) as session:
@@ -191,7 +199,7 @@ def knitwork(
                 "instance/"
             )[-1]
 
-            mrich.success("Job request submitted", json["id"], json["squonk_url_ext"])
+            mrich.success("Job request submitted", transfer_dict["squonk_instance"])
 
     # MONITOR JOB
 

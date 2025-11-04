@@ -58,7 +58,7 @@ def instances(
     response = DmApi.get_available_instances(token)
 
     if not response.success:
-        mrich.error("Failed to get instances from squonk")
+        mrich.error("Failed to get instances from squonk. Is token valid?")
         return None
 
     instances = response.msg["instances"]
@@ -89,6 +89,9 @@ def monitor_jobs(
 
         df = instances(token=token, stack=stack)
 
+        if df is None:
+            return None
+
         if instance_ids:
             if isinstance(instance_ids, str):
                 instance_ids = [instance_ids]
@@ -111,14 +114,15 @@ def monitor_jobs(
         table.add_column("Run Time", justify="right")
         table.add_column("Status", justify="center")
 
-        for i, row in df.iterrows():
-            table.add_row(
-                str(i),
-                str(row["job_job"]),
-                # str(row["name"]),
-                str(row["run_time"]),
-                str(row["phase"]),
-            )
+        if df is not None:
+            for i, row in df.iterrows():
+                table.add_row(
+                    str(i),
+                    str(row["job_job"]),
+                    # str(row["name"]),
+                    str(row["run_time"]),
+                    str(row["phase"]),
+                )
 
         return table
 
@@ -154,6 +158,9 @@ def list_files(
     mrich.var("project_id", project_id)
 
     DmApi.set_api_url(DM_API_URLS[stack])
+
+    if not root.startswith("/"):
+        root = "/" + root
 
     def project_tree(root="/"):
         response = DmApi.list_project_files(
