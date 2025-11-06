@@ -264,6 +264,8 @@ def fragmenstein_place(
                     "Job request submitted", json["id"], json["squonk_url_ext"]
                 )
 
+    return [urljoin(DATA_MANAGERS[stack], transfer_dict["squonk_url_ext"]) for transfer_dict in transfer_tasks]
+
 
 def fragmenstein_combine(
     observations: list[str],
