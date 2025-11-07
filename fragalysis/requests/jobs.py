@@ -1,6 +1,7 @@
 import mrich
 from mrich import print
 
+import json
 from pathlib import Path
 from urllib.parse import urljoin, quote, unquote
 
@@ -118,7 +119,7 @@ def create_snapshot(
         data="[]",
         parent=None,
         children=[],
-        additional_info=None,
+        additional_info=json.dumps({'visibleInUI': False}),
     )
 
     with _session(stack, token) as session:
