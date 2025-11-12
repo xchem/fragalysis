@@ -15,7 +15,7 @@
 
 ## Release Notes
 
-- [2025.10.3](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.3)
+- [2025.11.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.3)
 	* _FEATURE_ [Filtering by geometric coordinates](https://github.com/m2ms/fragalysis-frontend/issues/1821)
 	* _IMPROVEMENT_ [More options to download endpoint (e.g. sqlite files)](https://github.com/m2ms/fragalysis-frontend/issues/1932)
 	* _BUG_ [Restore missing snapshot thumbnails](https://github.com/m2ms/fragalysis-frontend/issues/1936)
