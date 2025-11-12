@@ -210,8 +210,10 @@ def fragmenstein_place(
             project_directory = transfer_dict["transfer_root"]
             mrich.var("project_directory", project_directory)
 
-            output_file = f"{project_directory}/placed.sdf"
+            reference_key = transfer_dict["reference"]
+            output_file = f"{project_directory}/placements_against_{reference_key}.sdf"
             mrich.var("output_file", output_file)
+            transfer_dict["output_file"] = output_file
 
             job_spec = dict(
                 collection="fragmenstein",
@@ -259,12 +261,13 @@ def fragmenstein_place(
                 transfer_dict["squonk_instance"] = json["squonk_url_ext"].split(
                     "instance/"
                 )[-1]
+                transfer_dict["squonk_instance_url"] = urljoin(DATA_MANAGERS[stack], transfer_dict["squonk_url_ext"])
 
                 mrich.success(
-                    "Job request submitted", json["id"], json["squonk_url_ext"]
+                    "Job request submitted", transfer_dict["squonk_instance"]
                 )
 
-    return [urljoin(DATA_MANAGERS[stack], transfer_dict["squonk_url_ext"]) for transfer_dict in transfer_tasks]
+    return transfer_tasks
 
 
 def fragmenstein_combine(

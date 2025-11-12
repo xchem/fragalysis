@@ -120,7 +120,9 @@ def download_target(
     }
 
     destination = Path(destination)
-    assert destination.exists()
+    if not destination.exists():
+        mrich.error("Download destination does not exist:", destination)
+        return None
 
     with _session(stack, token) as session:
 

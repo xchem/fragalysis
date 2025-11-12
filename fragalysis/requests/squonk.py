@@ -193,9 +193,9 @@ def list_files(
 def get_file(
     instance: str,
     path: str,
-    destination: str,
     token: str,
     stack: str = "production",
+    destination: str = None,
 ):
 
     from squonk2.dm_api import DmApi
@@ -216,6 +216,14 @@ def get_file(
     path = Path(path)
     parent = str(path.parent)
     file = path.name
+
+
+    if not destination:
+        destination = file
+    elif destination.endswith("/"):
+        destination = Path(destination) / file
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination = str(destination)
 
     response = DmApi.get_unmanaged_project_file(
         token,
