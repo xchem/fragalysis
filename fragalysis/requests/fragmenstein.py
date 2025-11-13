@@ -210,8 +210,7 @@ def fragmenstein_place(
             project_directory = transfer_dict["transfer_root"]
             mrich.var("project_directory", project_directory)
 
-            reference_key = transfer_dict["reference"]
-            output_file = f"{project_directory}/placements_against_{reference_key}.sdf"
+            output_file = f"{project_directory}/placements_against_{transfer_dict['reference_file'].name}.sdf"
             mrich.var("output_file", output_file)
             transfer_dict["output_file"] = output_file
 

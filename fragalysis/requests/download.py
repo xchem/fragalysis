@@ -75,6 +75,7 @@ def download_target(
     real_space_maps: bool = False,
     transformation_files: bool = False,
     reflections_files: bool = False,
+    extract: bool = True,
 ) -> None:
     """Request a target download from a Fragalysis deployment
 
@@ -95,6 +96,7 @@ def download_target(
     :param real_space_maps: Real-space map files (VERY BIG!) (.map)?
     :param transformation_files: Download transformations applied for alignments?
     :param reflections_files: Download reflections and map coefficients (.mtz)?
+    :param extract: Extract the downloaded zip / tar archive?
 
     """
 
@@ -192,6 +194,10 @@ def download_target(
                     with open(local_filename, "wb") as f:
                         for chunk in r.iter_content(chunk_size=8192):
                             f.write(chunk)
+
+            if not extract:
+                mrich.success("Download complete:", local_filename)
+                return local_filename
 
             if file_url.endswith(".zip"):
 
