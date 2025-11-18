@@ -8,7 +8,7 @@ import shutil
 from frequests.download import download_target
 
 
-_BASE_LOCAL_DIR: str = f"/tmp/download-target-stress-test-"
+_DOWNLOAD_DIR: str = f"/tmp/download-target-stress-test"
 
 if __name__ == "__main__":
 
@@ -16,8 +16,8 @@ if __name__ == "__main__":
         prog="download_target_stress_test",
         description="A stress-test for the download_target function,"
             " You define the concurrency, and each download is written to a separate"
-            f" sub-directory in '/tmp' with a base-name of '{_BASE_LOCAL_DIR}'"
-            " and suffix that is the concurrency number (i.e. 1..N)",
+            f" sub-directory in '{_DOWNLOAD_DIR}'"
+            " with the value of the concurrency number (i.e. 1..N)",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument("--tas",
@@ -50,10 +50,10 @@ if __name__ == "__main__":
         iteration: int = c + 1
 
         # We need to wipe (and recreate) each target download directory
-        destination: str = f"{_BASE_LOCAL_DIR}{iteration}"
+        destination: str = f"{_DOWNLOAD_DIR}/{iteration:02d}"
         if os.path.isdir(destination):
             shutil.rmtree(destination)
-        os.mkdir(destination)
+        os.makedirs(destination)
 
         Process(
             target=download_target,
