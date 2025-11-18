@@ -60,6 +60,7 @@ def target_list(
 def download_target(
     name: str,
     tas: str,
+    iteration: int = 1,
     stack: str = "production",
     token: str | None = None,
     destination: str = ".",
@@ -149,7 +150,7 @@ def download_target(
 
             task_status_url = urljoin(session.root, task_status_url)
 
-            with mrich.loading("Preparing download"):
+            with mrich.loading(f"Preparing download (to '{destination}')"):
                 for i in range(100_000):
 
                     status = session.get(task_status_url)

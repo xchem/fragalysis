@@ -1,3 +1,4 @@
+import requests
 from urllib.parse import urljoin
 from pathlib import Path
 from .urls import STACKS, LANDING_PAGE_URL
@@ -6,8 +7,6 @@ USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 
 
 def _session(stack: str = "production", token: str | None = None):
-
-    import requests
 
     if stack in STACKS:
         url_root = STACKS[stack]

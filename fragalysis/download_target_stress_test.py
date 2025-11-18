@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+
+import argparse
+from multiprocessing import Process
+import os
+import shutil
+
+from frequests.download import download_target
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(
+        prog="download_target_stress_test",
+        description="Tests the download_target function",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument("--tas", type=str, help="A Target Access String", required=True)
+    parser.add_argument("--concurrency", "-c", type=int, help="Number of concurrent processes", default=1)
+    parser.add_argument("--stack", "-s", type=str, help="An optional stack identity", default="staging")
+    parser.add_argument("--target", "-t", type=str, help="An optional Target name", default="A71EV2A")
+    parser.add_argument("--token", type=str, help="An optional API access token")
+
+    args = parser.parse_args()
+
+    # Run each download (to a separate local destination)
+    # as a concurrent set of (parallel) processes.
+
+    for c in range(args.concurrency):
+
+        iteration: int = c + 1
+
+        # We need to wipe (and recreate) each target download directory
+        destination: str = f"/tmp/download-target-stress-test-{iteration}"
+        if os.path.isdir(destination):
+            shutil.rmtree(destination)
+        os.mkdir(destination)
+
+        Process(
+            target=download_target,
+            args=(args.target, args.tas, iteration, args.stack),
+            kwargs={"destination": destination},
+        ).start()
