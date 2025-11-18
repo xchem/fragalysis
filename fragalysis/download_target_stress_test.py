@@ -8,18 +8,37 @@ import shutil
 from frequests.download import download_target
 
 
+_BASE_LOCAL_DIR: str = f"/tmp/download-target-stress-test-"
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
         prog="download_target_stress_test",
-        description="Tests the download_target function",
+        description="A stress-test for the download_target function,"
+            " You define the concurrency, and each download is written to a separate"
+            f" sub-directory in '/tmp' with a base-name of '{_BASE_LOCAL_DIR}'"
+            " and suffix that is the concurrency number (i.e. 1..N)",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument("--tas", type=str, help="A Target Access String", required=True)
-    parser.add_argument("--concurrency", "-c", type=int, help="Number of concurrent processes", default=1)
-    parser.add_argument("--stack", "-s", type=str, help="An optional stack identity", default="staging")
-    parser.add_argument("--target", "-t", type=str, help="An optional Target name", default="A71EV2A")
-    parser.add_argument("--token", type=str, help="An optional API access token")
+    parser.add_argument("--tas",
+                        type=str,
+                        help="A Target Access String",
+                        required=True)
+    parser.add_argument("--concurrency", "-c",
+                        type=int,
+                        help="Number of concurrent processes",
+                        default=1)
+    parser.add_argument("--stack", "-s",
+                        type=str,
+                        help="An optional stack identity",
+                        default="staging")
+    parser.add_argument("--target", "-t",
+                        type=str,
+                        help="An optional Target name",
+                        default="A71EV2A")
+    parser.add_argument("--token",
+                        type=str,
+                        help="An optional API access token")
 
     args = parser.parse_args()
 
@@ -31,7 +50,7 @@ if __name__ == "__main__":
         iteration: int = c + 1
 
         # We need to wipe (and recreate) each target download directory
-        destination: str = f"/tmp/download-target-stress-test-{iteration}"
+        destination: str = f"{_BASE_LOCAL_DIR}{iteration}"
         if os.path.isdir(destination):
             shutil.rmtree(destination)
         os.mkdir(destination)
