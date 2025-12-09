@@ -5,7 +5,8 @@
 # Developed for issue #1952.
 
 import argparse
-from multiprocessing import Pool, Process
+import datetime
+from multiprocessing import Process
 import os
 import shutil
 import time
@@ -76,5 +77,7 @@ if __name__ == "__main__":
     # Wait for each process
     for p in processes:
         p.join()
+
+    now = datetime.datetime.now()
     elapsed_s: float = time.time() - start_time_s
-    print(f"Elapsed(S)={elapsed_s}")
+    print(f"{now} Elapsed(S)={elapsed_s}")
