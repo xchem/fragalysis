@@ -150,10 +150,13 @@ def download_target(
 
             task_status_url = urljoin(session.root, task_status_url)
 
-            with mrich.loading(f"Preparing download (to '{destination}')"):
-                for i in range(100_000):
+            with mrich.loading(f"Preparing download (to '{destination}' task-url '{task_status_url}')"):
+                for _ in range(100_000):
 
                     status = session.get(task_status_url)
+                    if status.status_code != 200:
+                        print(status.text)
+                        assert status.status_code == 200
 
                     try:
                         status_json = status.json()
@@ -166,7 +169,7 @@ def download_target(
                     if finished:
                         break
 
-                    time.sleep(0.5)
+                    time.sleep(1.0)
 
                 else:
                     mrich.error("Timed out")

@@ -1,9 +1,14 @@
 #!/usr/bin/env python
+#
+# A test utility to allow concurrent downloads of targets
+# and developed to stress-test the download mechanism.
+# Developed for issue #1952.
 
 import argparse
-from multiprocessing import Process
+from multiprocessing import Pool, Process
 import os
 import shutil
+import time
 
 from frequests.download import download_target
 
@@ -45,6 +50,9 @@ if __name__ == "__main__":
     # Run each download (to a separate local destination)
     # as a concurrent set of (parallel) processes.
 
+    start_time_s: float = time.time()
+    processes: list[Process] = []
+
     for c in range(args.concurrency):
 
         iteration: int = c + 1
@@ -55,8 +63,18 @@ if __name__ == "__main__":
             shutil.rmtree(destination)
         os.makedirs(destination)
 
-        Process(
+        # Create a Process, start it,
+        # and add it to a list of running processes
+        process = Process(
             target=download_target,
             args=(args.target, args.tas, iteration, args.stack),
             kwargs={"destination": destination},
-        ).start()
+        )
+        process.start()
+        processes.append(process)
+
+    # Wait for each process
+    for p in processes:
+        p.join()
+    elapsed_s: float = time.time() - start_time_s
+    print(f"Elapsed(S)={elapsed_s}")
