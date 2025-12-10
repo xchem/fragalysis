@@ -9,6 +9,7 @@ from urllib.parse import urljoin
 from .session import _session
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL
 
+_DEBUG = False
 
 def target_list(
     stack: str = "production",
@@ -149,11 +150,14 @@ def download_target(
             ### CONTINUOUSLY MONITOR DOWNLOAD TASK
 
             task_status_url = urljoin(session.root, task_status_url)
+            last_status_text = ""
             with mrich.loading(f"Preparing download (to '{destination}' task-url '{task_status_url}')"):
                 for _ in range(100_000):
 
                     status = session.get(task_status_url)
-                    print(status.text)
+                    if _DEBUG  and status.text != last_status_text:
+                        last_status_text = status.text
+                        print(status.text)
                     if status.status_code != 200:
                         print(f"API ERROR: {status.status_code}/{status.text}")
                         print(f"task_status_url={task_status_url}")
