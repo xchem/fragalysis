@@ -149,13 +149,14 @@ def download_target(
             ### CONTINUOUSLY MONITOR DOWNLOAD TASK
 
             task_status_url = urljoin(session.root, task_status_url)
-
             with mrich.loading(f"Preparing download (to '{destination}' task-url '{task_status_url}')"):
                 for _ in range(100_000):
 
                     status = session.get(task_status_url)
+                    print(status.text)
                     if status.status_code != 200:
-                        print(status.text)
+                        print(f"API ERROR: {status.status_code}/{status.text}")
+                        print(f"task_status_url={task_status_url}")
                         assert status.status_code == 200
 
                     try:
@@ -163,10 +164,7 @@ def download_target(
                     except JSONDecodeError:
                         continue
 
-                    started = status_json.get("started", False)
-                    finished = status_json.get("finished", False)
-
-                    if finished:
+                    if status_json.get("finished", False):
                         break
 
                     time.sleep(1.0)
