@@ -79,5 +79,5 @@ if __name__ == "__main__":
         p.join()
 
     now = datetime.datetime.now()
-    elapsed_s: float = time.time() - start_time_s
-    print(f"{now} Elapsed(S)={elapsed_s}")
+    elapsed_s: int = int(time.time() - start_time_s)
+    print(f"{now.strftime('%Y-%m-%d %H:%M')} Elapsed(S): {elapsed_s}")
