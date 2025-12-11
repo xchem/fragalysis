@@ -10,14 +10,15 @@
 
 cmd="./download_target_stress_test.py --tas lb32627-66"
 log="keep-downloading.log"
+delay="45m"
 
 download=1
 while true
 do
-  echo $(date '+%Y-%m-%d %H:%M') Download: $download >> $log
-  $cmd >> $log 2>&1
-  echo $(date '+%Y-%m-%d %H:%M') Sleeping >> $log
-  sleep 5m
-  echo --- >> $log
+  echo $(date '+%Y-%m-%d %H:%M') Download: ${download} >> ${log}
+  $cmd >> ${log} 2>&1
+  echo $(date '+%Y-%m-%d %H:%M') Sleeping ${delay} ... >> ${log}
+  sleep ${delay}
+  echo --- >> ${log}
   ((download++))
 done
