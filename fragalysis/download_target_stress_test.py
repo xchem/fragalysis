@@ -69,7 +69,7 @@ if __name__ == "__main__":
         process = Process(
             target=download_target,
             args=(args.target, args.tas, iteration, args.stack),
-            kwargs={"destination": destination},
+            kwargs={"destination": destination, "debug": True},
         )
         process.start()
         processes.append(process)

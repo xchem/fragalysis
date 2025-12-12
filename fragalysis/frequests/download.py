@@ -1,3 +1,4 @@
+import datetime
 import re
 import time
 import mrich
@@ -8,8 +9,6 @@ from urllib.parse import urljoin
 
 from .session import _session
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL
-
-_DEBUG = False
 
 def target_list(
     stack: str = "production",
@@ -78,6 +77,7 @@ def download_target(
     transformation_files: bool = False,
     reflections_files: bool = False,
     extract: bool = True,
+    debug: bool = False,
 ) -> None:
     """Request a target download from a Fragalysis deployment
 
@@ -155,9 +155,10 @@ def download_target(
                 for _ in range(100_000):
 
                     status = session.get(task_status_url)
-                    if _DEBUG  and status.text != last_status_text:
+                    if debug and status.text != last_status_text:
                         last_status_text = status.text
-                        print(status.text)
+                        now = datetime.datetime.now()
+                        print(f"{now.strftime('%Y-%m-%d %H:%M')} {status.text}")
                     if status.status_code != 200:
                         print(f"API ERROR: {status.status_code}/{status.text}")
                         print(f"task_status_url={task_status_url}")
