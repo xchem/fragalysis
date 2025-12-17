@@ -7,7 +7,7 @@ from json import JSONDecodeError
 from urllib.parse import urljoin
 
 from .session import _session
-from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL
+from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL, TARGET_EXPERIMENT_UPLOADS_URL
 
 
 def target_list(
@@ -239,3 +239,85 @@ def download_target(
             return None
 
     return target_dir
+
+
+def target_uploads(
+    stack: str = "production",
+    token: str | None = None,
+    statistics_only: bool = False,
+) -> dict[(str,str), list]:
+    """Request a dictionary of uploads keyed by target name and target_access_strings from a Fragalysis deployment
+
+    :param stack: shorthand or URL of Fragalysis deployment, defaults to "production"
+    :param token: optional authentication token
+    :param statistics_only: don't list individual uploads
+    :returns: list of target upload dictionaries with "id", "title", and "project" keys
+    """
+
+    from datetime import datetime
+
+    with _session(stack, token) as session:
+
+        # get the API response
+
+        url = urljoin(session.root, TARGET_EXPERIMENT_UPLOADS_URL)
+
+        response = session.get(url)
+
+        if not response.ok:
+            mrich.error("Request failed", url, response.status_code)
+            return None
+
+        data = response.json()
+
+        # group the data by (target_name, proposal_number)
+
+        formatted = {}
+        for d in data["results"]:
+
+            key = (d["target_name"], d["proposal_number"])
+
+            formatted.setdefault(key, {})
+            formatted[key].setdefault("uploads", [])
+
+            formatted[key]["target_id"]=d["target"]
+            formatted[key]["target_name"]=d["target_name"]
+            formatted[key]["target_access_string"]=d["proposal_number"]
+            formatted[key]["project_id"]=d["project"]
+            
+            # reformat the serialised data
+
+            formatted[key]["uploads"].append(dict(
+                xca_tarball_url=d["tarball"],
+                committer_id=d["committer"],
+                committer_name=d["committer_name"],
+                upload_index=d["upload_version"],
+                data_format=f"{d['data_version_major']}.{d['data_version_minor']}",
+                timestamp=datetime.fromisoformat(d["commit_datetime"].replace("Z", "+00:00")),
+            ))
+
+    # sort and format the data
+
+    for key, d in formatted.items():
+
+        new_d = {}
+        
+        # general information
+        new_d["target_id"]=d["target_id"]
+        new_d["target_name"]=d["target_name"]
+        new_d["target_access_string"]=d["target_access_string"]
+        new_d["project_id"]=d["project_id"]
+        
+        # sort uploads
+        sorted_uploads = sorted(d["uploads"], key=lambda d: d["upload_index"])
+
+        # latest statistics
+        new_d["last_upload_index"]=sorted_uploads[-1]["upload_index"]
+        new_d["last_upload_timestamp"]=sorted_uploads[-1]["timestamp"]
+
+        if not statistics_only:
+            new_d["uploads"] = sorted_uploads
+        
+        formatted[key] = new_d
+
+    return formatted
