@@ -1,4 +1,3 @@
-
 # Browsing Experimental (LHS) data
 
 The left-hand-side (LHS) user interface of Fragalysis allows you to select experimental data for display, download, and computation.
@@ -7,6 +6,7 @@ There are two panels:
 
 - [Tag Details](#tag-details)
 - [Hit navigator](#hit-navigator)
+- [Geometric filtering](#geometric-filtering)
 
 <img src="_static/media/lhs_ui.png" alt="lhs" width="600px">
 
@@ -43,7 +43,7 @@ To select (activate checkboxes) in the hit navigator for all datasets belonging 
 
 ### LHS "poses" and "observations"
 
-Ligands from experimental datasets are known as **observations** are grouped into **poses**. **Poses** are named after and take their behaviour from their **main observation**. 
+Ligands from experimental datasets are known as **observations** are grouped into **poses**. **Poses** are named after and take their behaviour from their **main observation**.
 
 **Poses** and **observations** have the following interface:
 
@@ -86,3 +86,13 @@ Your search query will be matched against the following fields:
 This can be customised by clicking on the magnifying glass icon.
 
 See also [Creating direct URLs to specific views](urls.md)
+
+## Geometric filtering
+
+Geometric filtering allows you to limit hits based on their position in 3D space. When you click any structure in the NGL Viewer, a green semi-transparent sphere will appear. After clicking **Apply** in the **Radius selection** dialog, only hits that intersect with the sphere will be shown in the hit navigator.
+
+<img src="_static/media/FilteringSphere.png" alt="lhs" width="600px">
+
+This feature is **ON** by default and can be toggled in the Advanced Search dialog. If you turn it off, any existing geometric filtering is cleared and no spatial filtering will be applied.
+
+<img src="_static/media/AdvancedSearchDialog.png" alt="lhs" width="600px">
