@@ -4,6 +4,7 @@ STACKS = {
     "staging": "https://fragalysis.xchem.diamond.ac.uk",
     "production": "https://fragalysis.diamond.ac.uk",
     "matej-dev": "https://fragalysis-matej-default.xchem-dev.diamond.ac.uk",
+    "legacy": "https://fragalysis-legacy.xchem.diamond.ac.uk",
 }
 
 LOGIN_URL = "/accounts/login/"
