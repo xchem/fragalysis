@@ -5,7 +5,7 @@ Fragalysis offers simplified access to computational resources via JupyterLab. J
 
 ## Starting a Notebook app
 
-1. Go to the [Squonk Data Manager](https://data-manager-ui.xchem-dev.diamond.ac.uk/data-manager-ui/)
+1. Go to the [Squonk Data Manager](https://data-manager-ui.xchem.diamond.ac.uk/data-manager-ui/)
 
 2. Log in via CAS (top right button)
 
@@ -37,7 +37,7 @@ Once you have a notebook app configured and running, you can bookmark the link t
 
 ### Using Notebooks and templates
 
-When you first launch a notebook app with the `FFF Dev` container image you will only see the `welcome.ipynb` notebook in the left-hand-side file navigator. When you open this notebook you will see two code cells. Clicking the play button in the top menu bar will allow you to execute them and create two interfaces.
+When you first launch a notebook app with the `FFF Tools` container image you will only see the `welcome.ipynb` notebook in the left-hand-side file navigator. When you open this notebook you will see two code cells. Clicking the play button in the top menu bar will allow you to execute them and create two interfaces.
 
 The *Get template notebooks* interface offers buttons to fetch template notebooks from the template repository. 
 

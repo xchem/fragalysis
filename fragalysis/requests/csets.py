@@ -11,7 +11,7 @@ from .urls import CSET_UPLOAD_URL
 def upload_sdf(
     token: str,
     target_name: str,
-    target_access_string: str,
+    tas: str,
     sdf_file: str | Path,
     *,
     stack: str = "production"
@@ -20,23 +20,26 @@ def upload_sdf(
     sdf_file = Path(sdf_file)
     assert sdf_file.exists()
 
-    payload = dict(
-        target_name=target_name,
-        proposal_ref=target_access_string,
-        # sdf_file=..., #process the file into binary
-        submit_choice="U",
-        update_set=None,
-    )
-
-    files = {
-        "sdf_file": (sdf_file.name, open(sdf_file, "rb"), "application/octet-stream"),
-    }
+    with open(sdf_file, "rb") as f:
+        sdf_data = f.read()
 
     with _session(stack, token) as session:
-        url = urljoin(session.root, CSET_UPLOAD_URL)
-        response = session.post(url, data=payload, files=files)
 
-    files["sdf_file"][1].close()
+
+        payload = dict(
+            target_name=target_name,
+            proposal_ref=tas,
+            submit_choice="U",
+            update_set=None,
+        )
+        
+        url = urljoin(session.root, CSET_UPLOAD_URL)
+        print(url)
+
+        print(payload)
+        payload["sdf_file"] = sdf_data,
+        
+        response = session.post(url, data=payload)
 
     if not response.ok:
         mrich.error("Request failed", url, response.status_code)
