@@ -81,5 +81,5 @@ Then use the `download_target` function as described above.
 
 fragalysis.requests.download.target_list
 fragalysis.requests.download.download_target
-fragalysis.requests.legacy.get_target_compound_smiles
+fragalysis.requests.compounds.get_target_compound_smiles
 ```
