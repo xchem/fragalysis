@@ -2,7 +2,13 @@
 from urllib.parse import urljoin
 from .session import _session
 
-def get_target_compound_smiles():
+def get_target_compound_smiles() -> dict[str, set[str]]:
+    """
+    Use the /api/target_molecules/ endpoint to get the SMILES of all compounds associated with each target in the legacy stack.
+    
+    :return: A dictionary mapping target names to sets of associated compound SMILES.
+    :rtype: dict[str, set[str]]
+    """
 
     with _session(stack="legacy", token=None) as session:
 
