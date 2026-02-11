@@ -245,7 +245,7 @@ def target_uploads(
     stack: str = "production",
     token: str | None = None,
     statistics_only: bool = False,
-) -> dict[(str,str), list]:
+) -> dict[(str, str), list]:
     """Request a dictionary of uploads keyed by target name and target_access_strings from a Fragalysis deployment
 
     :param stack: shorthand or URL of Fragalysis deployment, defaults to "production"
@@ -280,44 +280,126 @@ def target_uploads(
             formatted.setdefault(key, {})
             formatted[key].setdefault("uploads", [])
 
-            formatted[key]["target_id"]=d["target"]
-            formatted[key]["target_name"]=d["target_name"]
-            formatted[key]["target_access_string"]=d["proposal_number"]
-            formatted[key]["project_id"]=d["project"]
-            
+            formatted[key]["target_id"] = d["target"]
+            formatted[key]["target_name"] = d["target_name"]
+            formatted[key]["target_access_string"] = d["proposal_number"]
+            formatted[key]["project_id"] = d["project"]
+
             # reformat the serialised data
 
-            formatted[key]["uploads"].append(dict(
-                xca_tarball_url=d["tarball"],
-                committer_id=d["committer"],
-                committer_name=d["committer_name"],
-                upload_index=d["upload_version"],
-                data_format=f"{d['data_version_major']}.{d['data_version_minor']}",
-                timestamp=datetime.fromisoformat(d["commit_datetime"].replace("Z", "+00:00")),
-            ))
+            formatted[key]["uploads"].append(
+                dict(
+                    xca_tarball_url=d["tarball"],
+                    committer_id=d["committer"],
+                    committer_name=d["committer_name"],
+                    upload_index=d["upload_version"],
+                    data_format=f"{d['data_version_major']}.{d['data_version_minor']}",
+                    timestamp=datetime.fromisoformat(
+                        d["commit_datetime"].replace("Z", "+00:00")
+                    ),
+                )
+            )
 
     # sort and format the data
 
     for key, d in formatted.items():
 
         new_d = {}
-        
+
         # general information
-        new_d["target_id"]=d["target_id"]
-        new_d["target_name"]=d["target_name"]
-        new_d["target_access_string"]=d["target_access_string"]
-        new_d["project_id"]=d["project_id"]
-        
+        new_d["target_id"] = d["target_id"]
+        new_d["target_name"] = d["target_name"]
+        new_d["target_access_string"] = d["target_access_string"]
+        new_d["project_id"] = d["project_id"]
+
         # sort uploads
         sorted_uploads = sorted(d["uploads"], key=lambda d: d["upload_index"])
 
         # latest statistics
-        new_d["last_upload_index"]=sorted_uploads[-1]["upload_index"]
-        new_d["last_upload_timestamp"]=sorted_uploads[-1]["timestamp"]
+        new_d["last_upload_index"] = sorted_uploads[-1]["upload_index"]
+        new_d["last_upload_timestamp"] = sorted_uploads[-1]["timestamp"]
 
         if not statistics_only:
             new_d["uploads"] = sorted_uploads
-        
+
         formatted[key] = new_d
 
     return formatted
+
+
+def download_target_uploads(
+    name: str,
+    tas: str,
+    index: int | None = None,
+    stack: str = "production",
+    token: str | None = None,
+    destination: str = ".",
+):
+    import tarfile
+
+    destination = Path(destination)
+    assert destination.exists()
+    destination = destination / f"{name}_{tas}"
+
+    mrich.var("destination", destination)
+
+    all_uploads = target_uploads(stack=stack, token=token)
+
+    uploads = all_uploads.get((name, tas))
+
+    if not uploads:
+        mrich.error(f"No uploads for {name=} {tas=}")
+        return
+
+    uploads = uploads["uploads"]
+
+    mrich.var("#uploads", len(uploads))
+
+    if index:
+        uploads = [d for d in uploads if d["upload_index"] == index]
+
+    with _session(stack=stack, token=token) as session:
+        for upload in uploads:
+
+            mrich.print(upload)
+
+            # dump the tarball
+
+            tarball_url = upload["xca_tarball_url"]
+            version_out = destination / ("v" + upload["data_format"])
+            tarball_out = version_out / Path(tarball_url).name
+
+            if not (parent := tarball_out.parent).exists():
+                mrich.writing(parent)
+                parent.mkdir(parents=True)
+
+            if not tarball_out.exists():
+
+                mrich.writing(tarball_out)
+
+                with session.get(
+                    tarball_url,
+                    stream=True,
+                ) as r:
+
+                    r.raise_for_status()
+                    with open(tarball_out, "wb") as f:
+                        for i, chunk in mrich.track(
+                            enumerate(r.iter_content(chunk_size=8192)),
+                            prefix="Downloading",
+                        ):
+                            if i % 100 == 0:
+                                mrich.set_progress_field("chunks", i)
+                            f.write(chunk)
+
+            with mrich.loading("Expanding tarball..."):
+
+                extract_dir = version_out / f"upload_{upload['upload_index']}"
+
+                if extract_dir.exists():
+                    mrich.warning(f"Skipping existing {extract_dir=}")
+                    continue
+
+                mrich.writing(extract_dir)
+                with tarfile.open(tarball_out, "r:gz") as tar_ref:
+                    tar_ref.extractall(version_out)
