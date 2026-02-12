@@ -12,9 +12,35 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/xchem/fragalysis-frontend?style=for-the-badge&label=last%20f%2Fe%20update)
 
 
-
 ## Release Notes
 
+- [2026.01.1](https://github.com/xchem/fragalysis-stack/releases/tag/2026.01.1)
+  * 1908 [Mpro download fails with 403](https://github.com/m2ms/fragalysis-frontend/issues/1908)
+  * 1922 [Major backend dependency upgrade](https://github.com/m2ms/fragalysis-frontend/issues/1922)
+  * 1932 [More options to download endpoint (e.g. sqlite files)](https://github.com/m2ms/fragalysis-frontend/issues/1932)
+  * 1934 [Squonk file transfer fails if no proteins supplied](https://github.com/m2ms/fragalysis-frontend/issues/1934)
+  * 1935 [Incorrect ligand file path handling in target loader](https://github.com/m2ms/fragalysis-frontend/issues/1935)
+  * 1936 [Missing snapshot thumbnails](https://github.com/m2ms/fragalysis-frontend/issues/1936)
+  * 1938 [Assay data upload bug](https://github.com/m2ms/fragalysis-frontend/issues/1938)
+  * 1939 [Fix __str__ method AttributeError](https://github.com/m2ms/fragalysis-frontend/issues/1939)
+  * 1944 [Changes to plot_data endpoint](https://github.com/m2ms/fragalysis-frontend/issues/1944)
+  * 1955 [Target loader support for v3 XCA data format](https://github.com/m2ms/fragalysis-frontend/issues/1955)
+  * 1966 [Path file restoration for v2 data (post-v3 migration)](https://github.com/m2ms/fragalysis-frontend/issues/1966)
+  * 1981 [Investigate OSV scanner during build](https://github.com/m2ms/fragalysis-frontend/issues/1981)
+  * 1991 [Remove Sentry error transmission?](https://github.com/m2ms/fragalysis-frontend/issues/1991)
+  * 1992 [Fix v3 data loading](https://github.com/m2ms/fragalysis-frontend/issues/1992)
+  * 2002 [Make cset upload ignore superseded observations](https://github.com/m2ms/fragalysis-frontend/issues/2002)
+  * 1598 https://github.com/m2ms/fragalysis-frontend/issues/1598
+  * 1819 https://github.com/m2ms/fragalysis-frontend/issues/1819
+  * 1889 [Expand observation column on first target load](https://github.com/m2ms/fragalysis-frontend/issues/1989)
+  * 1912 https://github.com/m2ms/fragalysis-frontend/issues/1912
+  * 1936 https://github.com/m2ms/fragalysis-frontend/issues/1936
+  * 1945 https://github.com/m2ms/fragalysis-frontend/issues/1945
+  * 1960 https://github.com/m2ms/fragalysis-frontend/issues/1960
+  * 1965 https://github.com/m2ms/fragalysis-frontend/issues/1965
+  * 1967 https://github.com/m2ms/fragalysis-frontend/issues/1967
+  * 1969 https://github.com/m2ms/fragalysis-frontend/issues/1969
+  * 1974 https://github.com/m2ms/fragalysis-frontend/issues/1974
 - [2025.11.1](https://github.com/xchem/fragalysis-stack/releases/tag/2025.10.3)
 	* _FEATURE_ [Filtering by geometric coordinates](https://github.com/m2ms/fragalysis-frontend/issues/1821)
 	* _IMPROVEMENT_ [More options to download endpoint (e.g. sqlite files)](https://github.com/m2ms/fragalysis-frontend/issues/1932)
