@@ -14,6 +14,11 @@
 
 ## Release Notes
 
+- [2026.02.1](https://github.com/xchem/fragalysis-stack/releases/tag/2026.02.1)
+  * 1997 [Results (former scores) invisible after unification](https://github.com/m2ms/fragalysis-frontend/issues/1997)
+  * 1998 [Change version mismatch message (XCAv3)](https://github.com/m2ms/fragalysis-frontend/issues/1998)
+  * 2003 [Incorrectly assigned shortcodes](https://github.com/m2ms/fragalysis-frontend/issues/2003)
+  * 2028 [Target loader no main_observation error](https://github.com/m2ms/fragalysis-frontend/issues/2028)
 - [2026.01.1](https://github.com/xchem/fragalysis-stack/releases/tag/2026.01.1)
   * 1908 [Mpro download fails with 403](https://github.com/m2ms/fragalysis-frontend/issues/1908)
   * 1922 [Major backend dependency upgrade](https://github.com/m2ms/fragalysis-frontend/issues/1922)
