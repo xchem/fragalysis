@@ -1,4 +1,3 @@
-
 # Using the Fragalysis Python API
 
 A work in progress Python package to interface with the Fragalysis web service via the [REST API](api) is available at [github.com/xchem/fragalysis](https://github.com/xchem/fragalysis).
@@ -38,7 +37,7 @@ download_target(name=target_name, tas=target_access_string, token=token, stack="
 The `token` keyword can be ommitted the target is public, `stack` can be either "production", "staging" or the URL of another Fragalysis deployment, tas is the "Target Access String" or DLS proposal-session string (e.g. `lb32627-66`), the destination can be any path and is "." by default.
 
 ```{note}
-The Fragalysis frontend may offer more options for target download than this API. Contributions to update the python API for feature parity are much appreciated. 
+The Fragalysis frontend may offer more options for target download than this API. Contributions to update the python API for feature parity are much appreciated.
 
 The `download_target` method which will need updating is in https://github.com/xchem/fragalysis/blob/main/fragalysis/requests/download.py
 
@@ -82,4 +81,5 @@ Then use the `download_target` function as described above.
 
 fragalysis.requests.download.target_list
 fragalysis.requests.download.download_target
+fragalysis.requests.compounds.get_target_compound_smiles
 ```

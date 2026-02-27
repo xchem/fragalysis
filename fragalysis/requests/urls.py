@@ -4,12 +4,14 @@ STACKS = {
     "staging": "https://fragalysis.xchem.diamond.ac.uk",
     "production": "https://fragalysis.diamond.ac.uk",
     "matej-dev": "https://fragalysis-matej-default.xchem-dev.diamond.ac.uk",
+    "legacy": "https://fragalysis-legacy.xchem.diamond.ac.uk",
 }
 
 LOGIN_URL = "/accounts/login/"
 DOWNLOAD_URL = "/api/download_structures/"
 LANDING_PAGE_URL = "/viewer/react/landing/"
 TARGETS_URL = "/api/targets/"
+COMPOUNDS_URL = "/api/compounds/"
 PROJECTS_URL = "/api/projects/"
 SESSION_PROJECTS_URL = "/api/session-projects/"
 SNAPSHOTS_URL = "/api/snapshots/"
