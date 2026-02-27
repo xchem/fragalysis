@@ -44,7 +44,7 @@ The Fragalysis Stack you find running in Kubernetes relies on a number of relate
 (and diverse) repositories. We've tried to capture references to all of them
 below, in no particular order: -
 
-**xchem respositories**
+**xchem repositories**
 
 [fragalysis-package] : Logic that allows connection to the neo4j graph
 
@@ -57,7 +57,10 @@ to create the container image
 
 [fragalysis-api] : Command-line API utilities
 
+[fragalysis-database] : A reference PostgreSQL database image (with extras)
+
 [fragalysis-keycloak] : A specialised build of keycloak to provide a custom login theme
+deprecated
 
 [fragalysis-ispyb-target-access-authenticator] : Code for the container image that acts
 as an interface to ISPyB, yielding Target Access Strings based on username
@@ -136,6 +139,7 @@ typically kubernetes or slurm: -
 [fragalysis-ispyb-target-access-authenticator]: https://github.com/xchem/fragalysis-ispyb-target-access-authenticator
 [fragalysis-rdkit-cartridge-pgvector-debian]: https://github.com/xchem/fragalysis-rdkit-cartridge-pgvector-debian
 [fragalysis-api]: https://github.com/xchem/fragalysis-api
+[fragalysis-database]: https://github.com/xchem/fragalysis-database
 [fragalysis-backend]: https://github.com/xchem/fragalysis-backend
 [fragalysis-frontend]: https://github.com/xchem/fragalysis-frontend
 [fragalysis-keycloak]: https://github.com/xchem/fragalysis-keycloak
