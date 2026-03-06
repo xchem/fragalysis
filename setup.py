@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
    name='xchem-fragalysis',
@@ -7,6 +7,6 @@ setup(
    description='Python module to interact with Fragalysis',
    author='Diamond Light Source / Informatics Matters',
    author_email='max.winokan@diamond.ac.uk',
-   packages=['fragalysis'],  #same as name
-   install_requires=['ipywidgets', 'mpytools'], #external packages as dependencies
+   packages=find_packages(),
+   install_requires=['ipywidgets', 'pandas', 'mpytools'], #external packages as dependencies
 )
