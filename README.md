@@ -13,7 +13,7 @@ as a 'base' for all documentation relating to the application.
 >   This replaces the original fragalysis repository, which was responsible for the
     RDKit-based Python tools for analysis of protein-ligand interactions.
     The original repository has been renamed and can now be found in the
-    [fragalysis-package] repository.
+    [fragutils] repository.
 
 The repository is compatible with ReadTheDocs and you can find the latest documentation
 (built from the most recent changes on this repository's `main` branch) on [ReadTheDocs] at
@@ -46,7 +46,7 @@ below, in no particular order: -
 
 **xchem repositories**
 
-[fragalysis-package] : Logic that allows connection to the neo4j graph
+[fragutils] : Logic that allows connection to the neo4j graph
 
 [fragalysis-backend] : Django/REST Framework application
 
@@ -143,7 +143,7 @@ typically kubernetes or slurm: -
 [fragalysis-backend]: https://github.com/xchem/fragalysis-backend
 [fragalysis-frontend]: https://github.com/xchem/fragalysis-frontend
 [fragalysis-keycloak]: https://github.com/xchem/fragalysis-keycloak
-[fragalysis-package]: https://github.com/xchem/fragalysis-package
+[fragutils]: https://github.com/xchem/fragutils
 [fragalysis-stack]: https://github.com/xchem/fragalysis-stack
 [readthedocs]: https://app.readthedocs.org/dashboard/
 [sphinx]: https://www.sphinx-doc.org/en/master
