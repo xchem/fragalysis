@@ -1,6 +1,9 @@
 # Fragalysis
 
-![documentation build](https://github.com/xchem/fragalysis/workflows/documentation%20build/badge.svg)
+![PyPI - Version](https://img.shields.io/pypi/v/xchem-fragalysis)
+
+![documentation build](https://github.com/xchem/fragalysis/actions/workflows/documentation-build.yaml/badge.svg)
+![release](https://github.com/xchem/fragalysis/actions/workflows/release.yaml/badge.svg)
 
 ![RTD latest build](https://readthedocs.org/projects/fragalysis/badge/?version=latest&style=plastic)
 
@@ -54,11 +57,10 @@ To compile the documentation, which is based on [Sphinx],
 start with a Python environment (ideally Python 3.12, as that's the version used by
 ReadTheDocs and the GitHub CI workflow) and install the dependencies: -
 
-    python -m venv venv
-    source venv/bin/activate
-    pip install --upgrade pip
-
-    pip install -r requirements.txt
+    pip install uv
+    uv venv
+    source .venv/bin/activate
+    pip install -r rtd-requirements.txt
 
 Then, to build the HTML documentation, run the following command: -
 
