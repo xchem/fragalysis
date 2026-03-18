@@ -1,6 +1,9 @@
 # Fragalysis
 
-![documentation build](https://github.com/xchem/fragalysis/workflows/documentation%20build/badge.svg)
+![PyPI - Version](https://img.shields.io/pypi/v/xchem-fragalysis)
+
+![documentation build](https://github.com/xchem/fragalysis/actions/workflows/documentation-build.yaml/badge.svg)
+![release](https://github.com/xchem/fragalysis/actions/workflows/release.yaml/badge.svg)
 
 ![RTD latest build](https://readthedocs.org/projects/fragalysis/badge/?version=latest&style=plastic)
 
@@ -13,7 +16,7 @@ as a 'base' for all documentation relating to the application.
 >   This replaces the original fragalysis repository, which was responsible for the
     RDKit-based Python tools for analysis of protein-ligand interactions.
     The original repository has been renamed and can now be found in the
-    [fragalysis-package] repository.
+    [fragutils] repository.
 
 The repository is compatible with ReadTheDocs and you can find the latest documentation
 (built from the most recent changes on this repository's `main` branch) on [ReadTheDocs] at
@@ -22,16 +25,42 @@ https://fragalysis.readthedocs.io/en/latest/.
 Stable documentation (built from the most recent tag in this repository) can be found at
 https://fragalysis.readthedocs.io/en/stable/.
 
+## XChem repositories
+A significant amount of our work resides in public GitHub repositories in the
+`XChem` organisation. A growing list of all the repositories that represent
+our work can be found in the **Related repositories** section below. We also rely on a
+number of _external_ repositories (those not managed by us directly). Importantly,
+when we find that the material in such a repository becomes crucial to our work we
+**SHOULD** consider *fork* it to `XChem`. Forking allows us to: -
+
+- Preserve content
+- Adopt our own development processes, which include: -
+  - A consistent release mechanism
+  - Consistent package naming (PyPI packages all begin `xchem-` for example)
+  - Use of linting, formatting, and test tools that we like
+- Improve stability (we like working with static *tagged* references)
+
+In `xchem` we tend to follow a trunk-based development strategy that we explain in
+our [trunk-based-development] repository. It's provides us with a centrally-defined
+set of policies with accompanying documentation on its [wiki] - a place
+where we provide guidance, some advanced topics, and development inspiration.
+
+**Working on codes that's not in XChem?**
+
+If you are using code that we don't own (manage) we **MUST** consider forking the
+repository into `XChem`, applying our development process, tagging it when important
+changes are available, and asking others to switch to using our repository and the
+packages it produces.
+
 ## Local development
 To compile the documentation, which is based on [Sphinx],
 start with a Python environment (ideally Python 3.12, as that's the version used by
 ReadTheDocs and the GitHub CI workflow) and install the dependencies: -
 
-    python -m venv venv
-    source venv/bin/activate
-    pip install --upgrade pip
-
-    pip install -r requirements.txt
+    pip install uv
+    uv venv
+    source .venv/bin/activate
+    pip install -r rtd-requirements.txt
 
 Then, to build the HTML documentation, run the following command: -
 
@@ -44,9 +73,11 @@ The Fragalysis Stack you find running in Kubernetes relies on a number of relate
 (and diverse) repositories. We've tried to capture references to all of them
 below, in no particular order: -
 
-**xchem respositories**
+**xchem repositories**
 
-[fragalysis-package] : Logic that allows connection to the neo4j graph
+[trunk-based-development] : A repository for development guidance
+
+[fragutils] : Logic that allows connection to the neo4j graph
 
 [fragalysis-backend] : Django/REST Framework application
 
@@ -57,7 +88,10 @@ to create the container image
 
 [fragalysis-api] : Command-line API utilities
 
+[fragalysis-database] : A reference PostgreSQL database image (with extras)
+
 [fragalysis-keycloak] : A specialised build of keycloak to provide a custom login theme
+deprecated
 
 [fragalysis-ispyb-target-access-authenticator] : Code for the container image that acts
 as an interface to ISPyB, yielding Target Access Strings based on username
@@ -136,11 +170,14 @@ typically kubernetes or slurm: -
 [fragalysis-ispyb-target-access-authenticator]: https://github.com/xchem/fragalysis-ispyb-target-access-authenticator
 [fragalysis-rdkit-cartridge-pgvector-debian]: https://github.com/xchem/fragalysis-rdkit-cartridge-pgvector-debian
 [fragalysis-api]: https://github.com/xchem/fragalysis-api
+[fragalysis-database]: https://github.com/xchem/fragalysis-database
 [fragalysis-backend]: https://github.com/xchem/fragalysis-backend
 [fragalysis-frontend]: https://github.com/xchem/fragalysis-frontend
 [fragalysis-keycloak]: https://github.com/xchem/fragalysis-keycloak
-[fragalysis-package]: https://github.com/xchem/fragalysis-package
+[fragutils]: https://github.com/xchem/fragutils
 [fragalysis-stack]: https://github.com/xchem/fragalysis-stack
 [readthedocs]: https://app.readthedocs.org/dashboard/
 [sphinx]: https://www.sphinx-doc.org/en/master
+[trunk-based-development]: https://github.com/xchem/trunk-based-development
 [xchem-align]: https://github.com/xchem/xchem-align
+[wiki]: https://github.com/xchem/trunk-based-development/wiki

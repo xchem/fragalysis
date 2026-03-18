@@ -1,4 +1,4 @@
-from .download import target_list, download_target
+from .download import target_list, download_target, target_uploads
 from .csets import upload_sdf
 from .plotly import upload_graph
 from .fragmenstein import fragmenstein_place, fragmenstein_combine

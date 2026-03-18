@@ -20,7 +20,7 @@ pip install --user -e .
 To get a list of target dictionaries accessible with an optional authentication token:
 
 ```
-from fragalysis.requests.download import target_list
+from fragalysis.requests import target_list
 targets = target_list(stack="production", token=token)
 ```
 
@@ -31,7 +31,7 @@ The `token` keyword can be ommitted if only accessing public targets, and `stack
 To get a list of target dictionaries accessible with an optional authentication token:
 
 ```
-from fragalysis.requests.download import download_target
+from fragalysis.requests import download_target
 download_target(name=target_name, tas=target_access_string, token=token, stack="production", destination=".")
 ```
 
@@ -46,6 +46,34 @@ The available POST request parameters to `/api/download_structures` can be seen 
 
 Relevant developer contacts on github are @mwinokan, @kaliif, and @boriskovar-m2ms.
 ```
+
+## Tracking experiment uploads
+
+For the purpose of automated scraping you can use the `target_uploads` function to see if there have been any recent uploads:
+
+```
+uploads = target_uploads(statistics_only=True)
+```
+
+This returns a dictionary keyed by (target_name, target_access_string):
+
+```
+{
+    ('A71EV2A', 'lb32627-66'): {
+        'target_id': 31,
+        'target_name': 'A71EV2A',
+        'target_access_string': 'lb32627-66',
+        'project_id': 1,
+        'last_upload_index': 8,
+        'last_upload_timestamp': datetime.datetime(2025, 10, 8, 12, 34, 0, 693173, tzinfo=datetime.timezone.utc)
+    },
+    ...
+}
+```
+
+You can then check `last_upload_index` against your most recent download, or use `last_upload_timestamp` to determine if a fresh download is needed.
+
+Then use the `download_target` function as described above.
 
 ## API reference
 
