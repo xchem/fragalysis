@@ -60,7 +60,6 @@ def target_list(
 def download_target(
     name: str,
     tas: str,
-    iteration: int = 1,
     stack: str = "production",
     token: str | None = None,
     destination: str = ".",
@@ -99,7 +98,7 @@ def download_target(
     :param transformation_files: Download transformations applied for alignments?
     :param reflections_files: Download reflections and map coefficients (.mtz)?
     :param extract: Extract the downloaded zip / tar archive?
-
+    :param debug: Add print debug displaying the change in download status text
     """
 
     payload = {
@@ -291,7 +290,7 @@ def target_uploads(
             formatted[key]["target_name"]=d["target_name"]
             formatted[key]["target_access_string"]=d["proposal_number"]
             formatted[key]["project_id"]=d["project"]
-            
+
             # reformat the serialised data
 
             formatted[key]["uploads"].append(dict(
@@ -308,13 +307,13 @@ def target_uploads(
     for key, d in formatted.items():
 
         new_d = {}
-        
+
         # general information
         new_d["target_id"]=d["target_id"]
         new_d["target_name"]=d["target_name"]
         new_d["target_access_string"]=d["target_access_string"]
         new_d["project_id"]=d["project_id"]
-        
+
         # sort uploads
         sorted_uploads = sorted(d["uploads"], key=lambda d: d["upload_index"])
 
@@ -324,7 +323,7 @@ def target_uploads(
 
         if not statistics_only:
             new_d["uploads"] = sorted_uploads
-        
+
         formatted[key] = new_d
 
     return formatted
