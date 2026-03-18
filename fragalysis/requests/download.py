@@ -1,3 +1,4 @@
+import datetime
 import re
 import time
 import mrich
@@ -8,7 +9,6 @@ from urllib.parse import urljoin
 
 from .session import _session
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL, TARGET_EXPERIMENT_UPLOADS_URL
-
 
 def target_list(
     stack: str = "production",
@@ -76,6 +76,7 @@ def download_target(
     transformation_files: bool = False,
     reflections_files: bool = False,
     extract: bool = True,
+    debug: bool = False,
 ) -> None:
     """Request a target download from a Fragalysis deployment
 
@@ -97,7 +98,7 @@ def download_target(
     :param transformation_files: Download transformations applied for alignments?
     :param reflections_files: Download reflections and map coefficients (.mtz)?
     :param extract: Extract the downloaded zip / tar archive?
-
+    :param debug: Add print debug displaying the change in download status text
     """
 
     payload = {
@@ -148,24 +149,29 @@ def download_target(
             ### CONTINUOUSLY MONITOR DOWNLOAD TASK
 
             task_status_url = urljoin(session.root, task_status_url)
-
-            with mrich.loading("Preparing download"):
-                for i in range(100_000):
+            last_status_text = ""
+            with mrich.loading(f"Preparing download (to '{destination}' task-url '{task_status_url}')"):
+                for _ in range(100_000):
 
                     status = session.get(task_status_url)
+                    if debug and status.text != last_status_text:
+                        last_status_text = status.text
+                        now = datetime.datetime.now()
+                        print(f"{now.strftime('%Y-%m-%d %H:%M')} {status.text}")
+                    if status.status_code != 200:
+                        print(f"API ERROR: {status.status_code}/{status.text}")
+                        print(f"task_status_url={task_status_url}")
+                        assert status.status_code == 200
 
                     try:
                         status_json = status.json()
                     except JSONDecodeError:
                         continue
 
-                    started = status_json.get("started", False)
-                    finished = status_json.get("finished", False)
-
-                    if finished:
+                    if status_json.get("finished", False):
                         break
 
-                    time.sleep(0.5)
+                    time.sleep(1.0)
 
                 else:
                     mrich.error("Timed out")
@@ -284,7 +290,7 @@ def target_uploads(
             formatted[key]["target_name"]=d["target_name"]
             formatted[key]["target_access_string"]=d["proposal_number"]
             formatted[key]["project_id"]=d["project"]
-            
+
             # reformat the serialised data
 
             formatted[key]["uploads"].append(dict(
@@ -301,13 +307,13 @@ def target_uploads(
     for key, d in formatted.items():
 
         new_d = {}
-        
+
         # general information
         new_d["target_id"]=d["target_id"]
         new_d["target_name"]=d["target_name"]
         new_d["target_access_string"]=d["target_access_string"]
         new_d["project_id"]=d["project_id"]
-        
+
         # sort uploads
         sorted_uploads = sorted(d["uploads"], key=lambda d: d["upload_index"])
 
@@ -317,7 +323,7 @@ def target_uploads(
 
         if not statistics_only:
             new_d["uploads"] = sorted_uploads
-        
+
         formatted[key] = new_d
 
     return formatted
