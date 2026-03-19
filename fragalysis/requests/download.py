@@ -77,6 +77,7 @@ def download_target(
     reflections_files: bool = False,
     extract: bool = True,
     debug: bool = False,
+    iteration: int = 1,
 ) -> None:
     """Request a target download from a Fragalysis deployment
 
@@ -99,6 +100,7 @@ def download_target(
     :param reflections_files: Download reflections and map coefficients (.mtz)?
     :param extract: Extract the downloaded zip / tar archive?
     :param debug: Add print debug displaying the change in download status text
+    :param iteration: A number used to distinguish output messages (important when downloading concurrent targets)
     """
 
     payload = {
@@ -131,7 +133,7 @@ def download_target(
 
         download_api_url = urljoin(session.root, DOWNLOAD_URL)
 
-        with mrich.loading("Requesting download"):
+        with mrich.loading(f"Requesting download [{iteration}]"):
 
             start_download_process_response = session.post(
                 download_api_url,
@@ -150,18 +152,18 @@ def download_target(
 
             task_status_url = urljoin(session.root, task_status_url)
             last_status_text = ""
-            with mrich.loading(f"Preparing download (to '{destination}' task-url '{task_status_url}')"):
+            with mrich.loading(f"Preparing download [{iteration}] (to '{destination}' task-url '{task_status_url}')"):
                 for _ in range(100_000):
 
                     status = session.get(task_status_url)
                     if debug and status.text != last_status_text:
                         last_status_text = status.text
                         now = datetime.datetime.now()
-                        print(f"{now.strftime('%Y-%m-%d %H:%M')} {status.text}")
+                        print(f"{now.strftime('%Y-%m-%d %H:%M')} [{iteration}] {status.text}")
                     if status.status_code != 200:
-                        print(f"API ERROR: {status.status_code}/{status.text}")
-                        print(f"task_status_url={task_status_url}")
-                        assert status.status_code == 200
+                        mrich.error(f"API did not respond with 200 [{iteration}]: {status.status_code} {status.text}")
+                        mrich.error(f"Task Status URL [{iteration}]: '{task_status_url}'")
+                        return
 
                     try:
                         status_json = status.json()
@@ -174,21 +176,21 @@ def download_target(
                     time.sleep(1.0)
 
                 else:
-                    mrich.error("Timed out")
+                    mrich.error(f"Timed out [{iteration}]")
                     raise ValueError
 
             file_url = status_json.get("messages", "")
 
             if not re.search(r"^\/code\/media\/downloads\/.*\.tar\.gz$", file_url):
-                mrich.error("No tarball in payload")
+                mrich.error(f"No tarball in payload [{iteration}]")
 
             ### DOWNLOAD PREPARED PAYLOAD
 
             local_filename = destination / Path(file_url).name
 
-            with mrich.loading("Downloading..."):
+            with mrich.loading(f"Downloading [{iteration}]..."):
 
-                mrich.writing(local_filename)
+                mrich.writing(f"[{iteration}] {local_filename}")
 
                 with session.get(
                     download_api_url,
@@ -202,12 +204,12 @@ def download_target(
                             f.write(chunk)
 
             if not extract:
-                mrich.success("Download complete:", local_filename)
+                mrich.success(f"Download complete [{iteration}]:", local_filename)
                 return local_filename
 
             if file_url.endswith(".zip"):
 
-                with mrich.loading("Unzipping..."):
+                with mrich.loading(f"Unzipping [{iteration}]..."):
 
                     import zipfile
 
@@ -215,13 +217,13 @@ def download_target(
 
                     target_dir.mkdir(exist_ok=True)
 
-                    mrich.writing(target_dir)
+                    mrich.writing(f"[{iteration}] {target_dir}")
                     with zipfile.ZipFile(local_filename, "r") as zip_ref:
                         zip_ref.extractall(target_dir)
 
             elif file_url.endswith(".tar.gz"):
 
-                with mrich.loading("Expanding tarball..."):
+                with mrich.loading(f"Expanding tarball [{iteration}]..."):
 
                     import tarfile
 
@@ -231,17 +233,17 @@ def download_target(
 
                     target_dir.mkdir(exist_ok=True)
 
-                    mrich.writing(target_dir)
+                    mrich.writing(f"[{iteration}] {target_dir}")
                     with tarfile.open(local_filename, "r:gz") as tar_ref:
                         tar_ref.extractall(target_dir)
 
             else:
-                raise ValueError("Unsupported filetype")
+                raise ValueError(f"Unsupported filetype [{iteration}]")
 
-            mrich.success("Download complete:", target_dir)
+            mrich.success(f"Download complete [{iteration}]:", target_dir)
 
         else:
-            mrich.error("Download Failed")
+            mrich.error(f"Download Failed [{iteration}]")
             return None
 
     return target_dir
