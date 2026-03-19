@@ -161,9 +161,9 @@ def download_target(
                         now = datetime.datetime.now()
                         print(f"{now.strftime('%Y-%m-%d %H:%M')} [{iteration}] {status.text}")
                     if status.status_code != 200:
-                        print(f"API ERROR [{iteration}]: {status.status_code}/{status.text}")
-                        print(f"task_status_url={task_status_url}")
-                        assert status.status_code == 200
+                        mrich.error(f"API did not respond with 200 [{iteration}]: {status.status_code} {status.text}")
+                        mrich.error(f"Task Status URL [{iteration}]: '{task_status_url}'")
+                        return
 
                     try:
                         status_json = status.json()
