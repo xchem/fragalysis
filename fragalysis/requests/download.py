@@ -7,7 +7,7 @@ from pathlib import Path
 from json import JSONDecodeError
 from urllib.parse import urljoin
 
-from .session import _session
+from .session import _session, debug_requests_on
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL, TARGET_EXPERIMENT_UPLOADS_URL
 
 def target_list(
@@ -78,6 +78,7 @@ def download_target(
     extract: bool = True,
     debug: bool = False,
     iteration: int = 1,
+    debug_requests: bool = False
 ) -> None:
     """Request a target download from a Fragalysis deployment
 
@@ -101,6 +102,7 @@ def download_target(
     :param extract: Extract the downloaded zip / tar archive?
     :param debug: Add print debug displaying the change in download status text
     :param iteration: A number used to distinguish output messages (important when downloading concurrent targets)
+    :param debug_requests: True to set underlying HTTP request logging to DEBUG
     """
 
     payload = {
@@ -128,6 +130,9 @@ def download_target(
     if not destination.exists():
         mrich.error("Download destination does not exist:", destination)
         return None
+
+    if debug_requests:
+        debug_requests_on()
 
     with _session(stack, token) as session:
 
