@@ -8,7 +8,7 @@ from json import JSONDecodeError
 from urllib.parse import urljoin
 
 from .session import _session, debug_requests_on
-from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL, TARGET_EXPERIMENT_UPLOADS_URL
+from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL, TARGET_EXPERIMENT_UPLOADS_URL, RE_DOWNLOAD_TARGET_FILENAME
 
 def target_list(
     stack: str = "production",
@@ -147,16 +147,19 @@ def download_target(
 
         if start_download_process_response.ok:
             response_json = start_download_process_response.json()
-
             task_status_url = response_json.get("task_status_url")
-
             if not task_status_url:
                 raise ValueError("No task URL returned")
 
             ### CONTINUOUSLY MONITOR DOWNLOAD TASK
 
+            # We continue checking the 'status' URL
+            # until we find what looks like a download filename
             task_status_url = urljoin(session.root, task_status_url)
+            file_url_re = re.compile(RE_DOWNLOAD_TARGET_FILENAME)
             last_status_text = ""
+            last_message = ""
+            file_url = ""
             with mrich.loading(f"Preparing download [{iteration}] (to '{destination}' task-url '{task_status_url}')"):
                 for _ in range(100_000):
 
@@ -175,7 +178,9 @@ def download_target(
                     except JSONDecodeError:
                         continue
 
-                    if status_json.get("finished", False):
+                    last_message = status_json.get("messages", "")
+                    if last_message and file_url_re.match(last_message):
+                        file_url = last_message
                         break
 
                     time.sleep(1.0)
@@ -184,10 +189,9 @@ def download_target(
                     mrich.error(f"Timed out [{iteration}]")
                     raise ValueError
 
-            file_url = status_json.get("messages", "")
-
-            if not re.search(r"^\/code\/media\/downloads\/.*\.tar\.gz$", file_url):
-                mrich.error(f"No tarball in payload [{iteration}]")
+            # If we get here we expect to have found a file-url in the API message
+            if not file_url:
+                mrich.error(f"Message does not name a tarball [{iteration}] message='{last_message}'")
 
             ### DOWNLOAD PREPARED PAYLOAD
 

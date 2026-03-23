@@ -18,3 +18,6 @@ TASK_STATUS_URL = "/viewer/task_status/"
 USER_URL = "/api/user"
 PLOT_DATA_URL = "/api/plot_data/"
 TARGET_EXPERIMENT_UPLOADS_URL = "/api/target_experiment_uploads/"
+
+# Regular expression for download file in the status message...
+RE_DOWNLOAD_TARGET_FILENAME = r"^\/code\/media\/downloads\/.*\.tar\.gz$"
