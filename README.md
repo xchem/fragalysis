@@ -99,6 +99,8 @@ as an interface to ISPyB, yielding Target Access Strings based on username
 [fragalysis-mock-target-access-authenticator] : A "mock" ISPyB authenticator
 (providing results based on a config file)
 
+[fragalysis-target-access-authenticator-python-client] : A Python client for the authenticator
+
 [fragalysis-rdkit-cartridge-pgvector-debian] : An extension to the underlying database
 image (informaticsmatters/rdkit-cartridge-debian) that adds PG-Vector utilities
 
@@ -166,6 +168,7 @@ typically kubernetes or slurm: -
 [docker-neo4j]: https://github.com/xchem/docker-neo4j
 [fragalysis-stack-behaviour-tests]: https://github.com/xchem/fragalysis-stack-behaviour-tests
 [fragalysis-mock-target-access-authenticator]: https://github.com/xchem/fragalysis-mock-target-access-authenticator
+[fragalysis-target-access-authenticator-python-client]: https://github.com/xchem/fragalysis-target-access-authenticator-python-client
 [fragalysis-stack-kubernetes]: https://github.com/xchem/fragalysis-stack-kubernetes
 [fragalysis-ispyb-target-access-authenticator]: https://github.com/xchem/fragalysis-ispyb-target-access-authenticator
 [fragalysis-rdkit-cartridge-pgvector-debian]: https://github.com/xchem/fragalysis-rdkit-cartridge-pgvector-debian
