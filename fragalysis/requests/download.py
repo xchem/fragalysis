@@ -210,7 +210,7 @@ def download_target(
 
             with mrich.loading(f"Downloading [{iteration}]..."):
 
-                mrich.writing(f"[{iteration}] {local_filename} (file_url={file_url})")
+                mrich.writing(f"[{iteration}] {local_filename}")
 
                 with session.get(
                     download_api_url,
