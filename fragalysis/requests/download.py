@@ -1,4 +1,5 @@
 import datetime
+import random
 import re
 import time
 import mrich
@@ -9,6 +10,12 @@ from urllib.parse import urljoin
 
 from .session import _session, debug_requests_on
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL, TARGET_EXPERIMENT_UPLOADS_URL, RE_DOWNLOAD_TARGET_FILENAME
+
+# Seed the random number generator
+random.seed()
+
+_DOWNLOAD_MIN_SLEEP: int = 2
+_DOWNLOAD_MAX_SLEEP: int = 12
 
 def target_list(
     stack: str = "production",
@@ -184,7 +191,8 @@ def download_target(
                         file_url = last_message
                         break
 
-                    time.sleep(1.0)
+                    # Git it a rest - with a new random sleep period
+                    time.sleep(random.randint(_DOWNLOAD_MIN_SLEEP, _DOWNLOAD_MAX_SLEEP))
 
                 else:
                     mrich.error(f"Download took too long [{iteration}]")
