@@ -128,7 +128,7 @@ def download_target(
 
     destination = Path(destination)
     if not destination.exists():
-        mrich.error("Download destination does not exist:", destination)
+        mrich.error(f"Download destination does not exist [{iteration}]: {destination}")
         return None
 
     if debug_requests:
@@ -149,6 +149,7 @@ def download_target(
             response_json = start_download_process_response.json()
             task_status_url = response_json.get("task_status_url")
             if not task_status_url:
+                mrich.error(f"No task URL returned [{iteration}]")
                 raise ValueError("No task URL returned")
 
             ### CONTINUOUSLY MONITOR DOWNLOAD TASK
@@ -186,7 +187,7 @@ def download_target(
                     time.sleep(1.0)
 
                 else:
-                    mrich.error(f"Timed out [{iteration}]")
+                    mrich.error(f"Download took too long [{iteration}]")
                     raise ValueError
 
             # If we get here we expect to have found a file-url in the API message
@@ -252,7 +253,10 @@ def download_target(
             mrich.success(f"Download complete [{iteration}]:", target_dir)
 
         else:
-            mrich.error(f"Download Failed [{iteration}]")
+            # Failed to start the download
+            status_code = start_download_process_response.status_code
+            text = start_download_process_response.text
+            mrich.error(f"Initiation of download failed [{iteration}]: code={status_code} text={text}")
             return None
 
     return target_dir
