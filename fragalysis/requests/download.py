@@ -154,49 +154,51 @@ def download_target(
 
         if start_download_process_response.ok:
             response_json = start_download_process_response.json()
+            # We might get a file_url or a task_status_url
+            file_url = response_json.get("file_url")
             task_status_url = response_json.get("task_status_url")
-            if not task_status_url:
-                mrich.error(f"No task URL returned [{iteration}]")
-                raise ValueError("No task URL returned")
+            if not task_status_url and not file_url:
+                mrich.error(f"No task or file URL returned [{iteration}] text={start_download_process_response.text}")
+                raise ValueError("No task or file URL returned")
 
-            ### CONTINUOUSLY MONITOR DOWNLOAD TASK
+            # If given a task monitor it until we get a file link
+            if task_status_url:
+                # We continue checking the 'task' URL
+                # until we find what looks like a download filename
+                task_status_url = urljoin(session.root, task_status_url)
+                file_url_re = re.compile(RE_DOWNLOAD_TARGET_FILENAME)
+                last_status_text = ""
+                last_message = ""
+                file_url = ""
+                with mrich.loading(f"Preparing download [{iteration}] (to '{destination}' task-url '{task_status_url}')"):
+                    for _ in range(100_000):
 
-            # We continue checking the 'status' URL
-            # until we find what looks like a download filename
-            task_status_url = urljoin(session.root, task_status_url)
-            file_url_re = re.compile(RE_DOWNLOAD_TARGET_FILENAME)
-            last_status_text = ""
-            last_message = ""
-            file_url = ""
-            with mrich.loading(f"Preparing download [{iteration}] (to '{destination}' task-url '{task_status_url}')"):
-                for _ in range(100_000):
+                        status = session.get(task_status_url)
+                        if debug and status.text != last_status_text:
+                            last_status_text = status.text
+                            now = datetime.datetime.now()
+                            print(f"{now.strftime('%Y-%m-%d %H:%M')} [{iteration}] {status.text}")
+                        if status.status_code != 200:
+                            mrich.error(f"API did not respond with 200 [{iteration}]: {status.status_code} {status.text}")
+                            mrich.error(f"Task Status URL [{iteration}]: '{task_status_url}'")
+                            return
 
-                    status = session.get(task_status_url)
-                    if debug and status.text != last_status_text:
-                        last_status_text = status.text
-                        now = datetime.datetime.now()
-                        print(f"{now.strftime('%Y-%m-%d %H:%M')} [{iteration}] {status.text}")
-                    if status.status_code != 200:
-                        mrich.error(f"API did not respond with 200 [{iteration}]: {status.status_code} {status.text}")
-                        mrich.error(f"Task Status URL [{iteration}]: '{task_status_url}'")
-                        return
+                        try:
+                            status_json = status.json()
+                        except JSONDecodeError:
+                            continue
 
-                    try:
-                        status_json = status.json()
-                    except JSONDecodeError:
-                        continue
+                        last_message = status_json.get("messages", "")
+                        if last_message and file_url_re.match(last_message):
+                            file_url = last_message
+                            break
 
-                    last_message = status_json.get("messages", "")
-                    if last_message and file_url_re.match(last_message):
-                        file_url = last_message
-                        break
+                        # Git it a rest - with a new random sleep period
+                        time.sleep(random.randint(_DOWNLOAD_MIN_SLEEP, _DOWNLOAD_MAX_SLEEP))
 
-                    # Git it a rest - with a new random sleep period
-                    time.sleep(random.randint(_DOWNLOAD_MIN_SLEEP, _DOWNLOAD_MAX_SLEEP))
-
-                else:
-                    mrich.error(f"Download took too long [{iteration}]")
-                    raise ValueError
+                    else:
+                        mrich.error(f"Download took too long [{iteration}]")
+                        raise ValueError
 
             # If we get here we expect to have found a file-url in the API message
             if not file_url:
@@ -208,7 +210,7 @@ def download_target(
 
             with mrich.loading(f"Downloading [{iteration}]..."):
 
-                mrich.writing(f"[{iteration}] {local_filename}")
+                mrich.writing(f"[{iteration}] {local_filename} (file_url={file_url})")
 
                 with session.get(
                     download_api_url,
