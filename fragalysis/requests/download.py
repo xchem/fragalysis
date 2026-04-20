@@ -1,3 +1,4 @@
+import contextlib
 import datetime
 from os.path import normpath
 import random
@@ -16,7 +17,7 @@ from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL, TARGET_EXPERIMENT_UPL
 # Seed the random number generator
 random.seed()
 
-_DOWNLOAD_MIN_SLEEP: int = 2
+_DOWNLOAD_MIN_SLEEP: int = 4
 _DOWNLOAD_MAX_SLEEP: int = 12
 
 def target_list(
@@ -187,17 +188,23 @@ def download_target(
                             last_status_text = status.text
                             now = datetime.datetime.now()
                             print(f"{now.strftime('%Y-%m-%d %H:%M')} [{iteration}] {status.text}")
+
+                        # Handle task query problems...
                         if status.status_code != 200:
-                            mrich.error(f"API did not respond with 200 [{iteration}]: {status.status_code} {status.text}")
-                            mrich.error(f"Task Status URL [{iteration}]: '{task_status_url}'")
-                            return
+                            if status.status_code == 504:
+                                # Gateway Time-out - Warning but try again...
+                                mrich.warning(f"Gateway Time-out (504) [{iteration}]")
+                            else:
+                                # Not a Gateway Time-out - error and leave
+                                mrich.error(f"API error ({status.status_code}) [{iteration}]: {status.text}")
+                                mrich.error(f"Task ID [{iteration}]: '{stack_task_id}'")
+                                return
 
-                        try:
+                        # Ay payload?
+                        with contextlib.suppress(JSONDecodeError):
                             status_json = status.json()
-                        except JSONDecodeError:
-                            continue
+                            last_message = status_json.get("messages", "")
 
-                        last_message = status_json.get("messages", "")
                         if last_message and file_url_re.match(last_message):
                             file_url = last_message
                             break
