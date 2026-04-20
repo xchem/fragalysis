@@ -196,6 +196,8 @@ def download_target(
                             if status.status_code == 504:
                                 # Gateway Time-out - Warning but try again...
                                 mrich.warning(f"Gateway Time-out (504) [{iteration}]")
+                                # ...with a New session
+                                session = _session(stack, token)
                             else:
                                 # Not a Gateway Time-out - error and leave
                                 mrich.error(f"API error ({status.status_code}) [{iteration}]: {status.text}")
