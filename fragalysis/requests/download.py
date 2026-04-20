@@ -1,7 +1,9 @@
 import datetime
+from os.path import normpath
 import random
 import re
 import time
+from urllib.parse import urlsplit
 import mrich
 
 from pathlib import Path
@@ -170,6 +172,13 @@ def download_target(
                 last_status_text = ""
                 last_message = ""
                 file_url = ""
+
+                # Display the Task ID from the URL.
+                # i.e. this 'https://fragalysis.xchem.diamond.ac.uk/viewer/task_status/e2440bdd-8182-465c-8be2-fe3a0c424801/'
+                # becomes 'e2440bdd-8182-465c-8be2-fe3a0c424801'...
+                stack_task_id = normpath(urlsplit(task_status_url).path).split('/')[-1]
+                mrich.debug(f"Download Task [{iteration}] {stack_task_id}")
+
                 with mrich.loading(f"Preparing download [{iteration}] (to '{destination}' task-url '{task_status_url}')"):
                     for _ in range(100_000):
 
