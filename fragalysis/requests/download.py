@@ -190,29 +190,22 @@ def download_target(
                             print(f"{now.strftime('%Y-%m-%d %H:%M')} [{iteration}] {status.text}")
 
                         # Handle task query problems (assuming success)
-                        api_error: bool = False
                         if status.status_code != 200:
-                            api_error = True
                             if status.status_code == 504:
-                                # Gateway Time-out - Warning but try again...
-                                mrich.warning(f"Gateway Time-out (504) [{iteration}]")
-                                # ...with a New session
-                                session = _session(stack, token)
+                                mrich.error(f"Gateway Time-out (504) [{iteration}]")
                             else:
                                 # Not a Gateway Time-out - error and leave
                                 mrich.error(f"API error ({status.status_code}) [{iteration}]: {status.text}")
-                                mrich.error(f"Task ID [{iteration}]: '{stack_task_id}'")
-                                return
+                            return
 
                         # Any payload?
-                        if not api_error:
-                            with contextlib.suppress(JSONDecodeError):
-                                status_json = status.json()
-                                last_message = status_json.get("messages", "")
+                        with contextlib.suppress(JSONDecodeError):
+                            status_json = status.json()
+                            last_message = status_json.get("messages", "")
 
-                            if last_message and file_url_re.match(last_message):
-                                file_url = last_message
-                                break
+                        if last_message and file_url_re.match(last_message):
+                            file_url = last_message
+                            break
 
                         # Git it a rest - with a new random sleep period
                         time.sleep(random.randint(_DOWNLOAD_MIN_SLEEP, _DOWNLOAD_MAX_SLEEP))
