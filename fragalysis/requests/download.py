@@ -189,8 +189,10 @@ def download_target(
                             now = datetime.datetime.now()
                             print(f"{now.strftime('%Y-%m-%d %H:%M')} [{iteration}] {status.text}")
 
-                        # Handle task query problems...
+                        # Handle task query problems (assuming success)
+                        api_error: bool = False
                         if status.status_code != 200:
+                            api_error = True
                             if status.status_code == 504:
                                 # Gateway Time-out - Warning but try again...
                                 mrich.warning(f"Gateway Time-out (504) [{iteration}]")
@@ -200,14 +202,15 @@ def download_target(
                                 mrich.error(f"Task ID [{iteration}]: '{stack_task_id}'")
                                 return
 
-                        # Ay payload?
-                        with contextlib.suppress(JSONDecodeError):
-                            status_json = status.json()
-                            last_message = status_json.get("messages", "")
+                        # Any payload?
+                        if not api_error:
+                            with contextlib.suppress(JSONDecodeError):
+                                status_json = status.json()
+                                last_message = status_json.get("messages", "")
 
-                        if last_message and file_url_re.match(last_message):
-                            file_url = last_message
-                            break
+                            if last_message and file_url_re.match(last_message):
+                                file_url = last_message
+                                break
 
                         # Git it a rest - with a new random sleep period
                         time.sleep(random.randint(_DOWNLOAD_MIN_SLEEP, _DOWNLOAD_MAX_SLEEP))
