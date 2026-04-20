@@ -1,6 +1,10 @@
 
 # Jupyter Notebooks in Fragalysis
 
+```{toctree}
+:maxdepth: 1
+```
+
 Fragalysis offers simplified access to computational resources via JupyterLab. JupyterLab provides a graphical user interface to run Python code via interactive notebooks, terminals, and scripts.
 
 ## Starting a Notebook app
@@ -30,7 +34,7 @@ Fragalysis offers simplified access to computational resources via JupyterLab. J
 ```{note}
 Once you have a notebook app configured and running, you can bookmark the link to the notebook to access it without navigating Squonk
 ```
-
+(general-tips)=
 ## General tips
 
 <img src="_static/media/nb_welcome.png" alt="notebook-welcome" width="600px">

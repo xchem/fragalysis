@@ -1,6 +1,10 @@
 
 # Changelog
 
+```{toctree}
+:maxdepth: 1
+```
+
 **Production**
 
 ![GitHub Release](https://img.shields.io/github/v/release/xchem/fragalysis-stack?display_name=tag&style=for-the-badge&label=production%20version&link=https%3A%2F%2Fgithub.com%2Fxchem%2Ffragalysis-stack%2Freleases)

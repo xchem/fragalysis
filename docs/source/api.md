@@ -1,11 +1,15 @@
 
 # Using the Fragalysis REST API
 
+```{toctree}
+:maxdepth: 1
+```
+
 The list of Fragalysis' REST API endpoints can be found at `<fragalysis url>/api`.
 
 ## Using endpoints from python scripts
 
-Fragalysis API can be accessed from Python scripts directly but there are a couple of things to look out for. Most of the endpoints require authentication. To obtain the authentication token, first log into Fragalysis and find it from the UI or visit the `api/token` endpoint. Cross-site scripting prevention can also sometimes cause problems. To use the endpoints from python scripts, you need to make sure the authentication token and CSRFtoken are set and correct.
+Fragalysis API can be accessed from Python scripts directly but there are a couple of things to look out for. Most of the endpoints require authentication. To obtain the authentication token, first log into Fragalysis and find it from the UI or visit the `<fragalysis url>/api/token` endpoint. Cross-site scripting prevention can also sometimes cause problems. To use the endpoints from python scripts, you need to make sure the authentication token and CSRFtoken are set and correct.
 
 ```python
 
