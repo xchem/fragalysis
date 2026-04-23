@@ -189,6 +189,9 @@ def download_target(
                         except requests.exceptions.ConnectionError:
                             mrich.error(f"Session ConnectionError [{iteration}]")
                             return
+                        except requests.exceptions.ChunkedEncodingError:
+                            mrich.error(f"Session ChunkedEncodingError [{iteration}]")
+                            return
 
                         if debug and status.text != last_status_text:
                             last_status_text = status.text
