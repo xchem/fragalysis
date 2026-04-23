@@ -10,6 +10,7 @@ import mrich
 from pathlib import Path
 from json import JSONDecodeError
 from urllib.parse import urljoin
+import requests
 
 from .session import _session, debug_requests_on
 from .urls import PROJECTS_URL, TARGETS_URL, DOWNLOAD_URL, TARGET_EXPERIMENT_UPLOADS_URL, RE_DOWNLOAD_TARGET_FILENAME
@@ -183,7 +184,12 @@ def download_target(
                 with mrich.loading(f"Preparing download [{iteration}] (to '{destination}' task-url '{task_status_url}')"):
                     for _ in range(100_000):
 
-                        status = session.get(task_status_url)
+                        try:
+                            status = session.get(task_status_url)
+                        except requests.exceptions.ConnectionError:
+                            mrich.error(f"Session ConnectionError [{iteration}]")
+                            return
+
                         if debug and status.text != last_status_text:
                             last_status_text = status.text
                             now = datetime.datetime.now()
@@ -193,6 +199,8 @@ def download_target(
                         if status.status_code != 200:
                             if status.status_code == 504:
                                 mrich.error(f"Gateway Time-out (504) [{iteration}]")
+                            elif status.status_code == 500:
+                                mrich.error(f"Server Error (500) [{iteration}]")
                             else:
                                 # Not a Gateway Time-out - error and leave
                                 mrich.error(f"API error ({status.status_code}) [{iteration}]: {status.text}")
