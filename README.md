@@ -90,6 +90,8 @@ to create the container image
 
 [fragalysis-database] : A reference PostgreSQL database image (with extras)
 
+[pgBouncer] : A PostgreSQL connection pooling image
+
 [fragalysis-keycloak] : A specialised build of keycloak to provide a custom login theme
 deprecated
 
@@ -179,6 +181,7 @@ typically kubernetes or slurm: -
 [fragalysis-keycloak]: https://github.com/xchem/fragalysis-keycloak
 [fragutils]: https://github.com/xchem/fragutils
 [fragalysis-stack]: https://github.com/xchem/fragalysis-stack
+[pgbouncer]: https://github.com/xchem/pgbouncer
 [readthedocs]: https://app.readthedocs.org/dashboard/
 [sphinx]: https://www.sphinx-doc.org/en/master
 [trunk-based-development]: https://github.com/xchem/trunk-based-development
