@@ -5,7 +5,7 @@ Fragalysis is a powerful app that can be used to visualise, analyse, and curate 
 
 ## Getting started
 
-Crystallographic data are uploaded to Fragalysis via [XChem Align](https://xchem-align.readthedocs.io) using either the [production](https://fragalysis.diamond.ac.uk) or [staging](https://fragalysis.xchem.diamond.ac.uk) stacks. If you are new to Fragalysis, we recommend starting with the [**Fragalysis user guide**](user_guide) to familiarise yourself with the most common analysis tasks.
+Crystallographic data are uploaded to Fragalysis via [XChem Align](https://xchem-align.readthedocs.io) using either the [production](https://fragalysis.diamond.ac.uk) or [staging](https://fragalysis.xchem.diamond.ac.uk) stacks. If available, affinity data collected using the Creoptix WAVEsystem and fit using either the vendor's software or [SensoFit](https://github.com/xchem/sensofit) can also be found accompanying the download. If you are new to Fragalysis, we recommend starting with the [**Fragalysis user guide**](user_guide) to familiarise yourself with the most common analysis tasks.
 
 ## Quick links:
 

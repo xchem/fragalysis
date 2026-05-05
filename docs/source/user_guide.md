@@ -6,7 +6,7 @@
 
 Fragalysis is a web-based platform for the visualisation, comparison, and analysis of fragment-bound protein crystal structures, assay measurements, and follow-up virtual ligand screens. It can effectively be divided into:
 
-**Experimental** fragment screening data processed via [XChemAlign](https://xchem-align.readthedocs.io) and uploaded to Fragalysis, curated and downloaded via the **"left-hand side" (LHS)** of Fragalysis.
+**Experimental** fragment screening data processed via [XChemAlign](https://xchem-align.readthedocs.io) and uploaded to Fragalysis, and affinity data collected using the Creoptix WAVEsystem and fit using either the vendor's software or [SensoFit](https://github.com/xchem/sensofit). These data can be curated and downloaded via the **"left-hand side" (LHS)** of Fragalysis.
 
 **Computed** follow-up designs from virtual compound sets uploaded to Fragalysis, curated and downloaded via the **"right-hand side" (RHS)** of Fragalysis.
 
@@ -231,7 +231,7 @@ https://fragalysis.diamond.ac.uk/viewer/react/preview/direct/
 (downloading-experimental-data)=
 ## Downloading experimental data (LHS)
 
-You can download experimental structures directly from the Fraglaysis UI. At the top of the Fragalysis viewer interface, you will see a download button:
+You can download experimental structures and affinity data (if present) directly from the Fraglaysis UI. At the top of the Fragalysis viewer interface, you will see a download button:
 
 ```{image} _static/media/download_button.png
 :width: 1000px
@@ -284,6 +284,86 @@ After selecting what files you want, select "Prepare download" to zip your files
 | **(For coders) Copy JSON for API call**     | Copies a structured JSON representation of your selection for programmatic access  | Scripting workflows, automation, or pipeline integration                     |
 | **Show Examples**                           | Opens example usage GitHub page                                                    | If you need useful example / template code.                                  |
 
+### Affinity Data
+
+If a data release contains accompanying affinity data, as part of the download affinity data will be contained in an `extra_files` archive `affinity_files.zip` and typically arranged as follows:
+
+>`all_affinity_data.csv`\
+>`all_affinity_data.sdf`\
+>`creoptix_raw_data.zip`\
+>`sensofit_package_data.zip`\
+>`sensofit_walkthough.ipynb`\
+>`README.pdf`
+
+#### All affinity data
+
+The `all_affinity_data.csv` file gathers all the values from manual kinetics evaluations using Creoptix software. Below is a decription
+of all the fields in the CSV:
+* “Run date”: date when the experiment was performed
+* “Cycle number”: ID of the cycle (defined by Creoptix during the experiment)
+* “Protein concentration (μg/mL)”: concentration in μg/mL the protein was captured at
+* “Channel”: which channel the signal comes from (formatted as Ch Y-X, where X is the ID of reference channel and Y is the ID of the active channel)
+* “Sample type”: whether the analyte was a control or a sample
+* “ASAP IDs”: ASAP ID of the analyte
+* “OpenBind IDs”: OpenBind ID of the analyte
+* “SMILES”: CxSMILES of the analyte with enhanced stereochemistry
+* “Sample concentration (M)”: concentration in M of the analyte used for the experiment
+* “ka (M-1s-1)”: association, or on-rate, constant in M-1.s-1 estimated by Creoptix
+* “ka error (%)”: the 95% confidence interval error of ka expressed as a percentage of the estimated ka value
+* “kd (s-1)”: dissociation, or off-rate, constant in s-1 estimated by Creoptix
+* “kd error (%)”: the 95% confidence interval error of kd expressed as a percentage of the estimated kd value
+* “KD (M)”: binding/affinity constant in M ($KD = kd/ka$)
+* "Rmax (pg/mm2)”: maximum signal response of the sensorgram in pg/mm2 for the analyte (estimated by Creoptix)
+* “Sqrt(Chi2)”: squared-root of Chi2 (goodness-of-fit metrics, lower = better/closer to 1 = better?)
+* “Comments”: comments of trained experimentalist on the sensorgram/fit for the analyte
+* “Used in analysis”: boolean flag indicating whether the data passed all curation criteria (see below table),
+and therefore was use in the ML analysis (True), or failed (False):
+
+| Criteria                                                  | Values                                        |
+|-----------------------------------------------------------|:---------------------------------------------:|
+| Removing boundary fits (i.e. where Creoptix couldn't fit) | `ka == 100`, `kd == 1e-7`, or `Rmax == 0.001` |
+| Removing large CI errors                                  | `ka error >200%` or `kd error >200%`          |
+| Removing "bad" goodness-of-fit metrics                    | `Sqrt(Chi2) >2`                               |
+| Removing low maximum signal response estimation           | `Rmax <0.5`                                   |
+
+Compounds that passed all criteria but had no associated structures were not used in analysis and were flagged "False".
+
+The `all_affinity_data.sdf` file is an SDF version of the CSV file generated using the `RDKit.Chem.SDWriter` function. It contains the exact
+same information as the CSV file.
+
+#### Creoptix raw data
+
+The `creoptix_raw_data.zip` archive contains all 4 Creoptix experiments used to generate the data. They can be read using
+Creoptix software or [SensoFit](https://github.com/xchem/sensofit) (more details about SensoFit below).
+
+#### SensoFit package data
+
+`sensofit_package_data.zip` is the compressed "package" of the 4 Creoptix experiments exported into a more accessible format using
+SensoFit `export function` (please refer to the [GitHub repo](https://github.com/xchem/sensofit)). For the first OpenBind data release, this is the input used in an additional file `sensofit_walkthough.ipynb`. This is a Jupyter Notebook that walks you through the first OpenBind data release affinity data using our open-source Python tool [SensoFit](https://github.com/xchem/sensofit).
+
+To use this notebook, please follow the steps below:
+Clone the [GitHub repo](https://github.com/xchem/sensofit), and cd to the root:
+```
+git clone https://github.com/xchem/sensofit
+cd sensofit
+```
+Create a new conda environment, activate it, then install the package:
+```
+conda create -n sensofit python=3.11
+conda activate sensofit
+pip install -e .
+```
+cd to the root of the affinity directory of the download and run the Jupyter Notebook:
+(note: change the path below to the path of the actual affinity_files directory)
+```
+cd /path/to/data-release/download/extra_files/affinity_files/
+jupyter lab
+```
+An internet page should open with the default JupyterLab home page. `sensofit_walkthough.ipynb` should be available in
+file browser on the left. Double click on the file and the notebook should open. You can run all the cell, or follow the instructions in the notebook cell by cell.
+
+---
+
 ### Interpreting the download
 
 A Fragalysis download will contain a minimum of 2 directories, `aligned_files` and `crytallographic_files`. The download will typically include the additional directories `extra_files`, `scripts` and `yaml_files`, as well as some additional files at the top level directory.
@@ -329,14 +409,20 @@ The `crystallographic_files` directory contains versions of data found in the al
 
 ### Extra files
 
-If the SoakDB CSV and/or SQLite option(s) have been selected, their corresponding files can be found in this directory. Beyond this, if this directory is present the files will have been added by the uploader of the data, and therefore has no defined structure. As a result we cannot guess what the contents of the file may be, but we hope that the uploader of the extra files will have provided a readme inside to describe each of the added files.
+If affinity data is available for a target, an `affinity_files` subdirectory containing all the affinity data will be available. A README inside this subdirectory will explain every file in detail.
+
+If the SoakDB CSV and/or SQLite option(s) have been selected, their corresponding files can be found in this directory. 
+
+Beyond this, if the `extra_files` directory is present the files will have been added by the uploader of the data, and therefore has no defined structure. As a result we cannot guess what the contents of the file may be, but we hope that the uploader of the extra files will have provided a README to describe any additional files.
+
 Some examples of extra files:
 
 | File pattern                     | Description                                                                                                                                  |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `protein-sequence.fasta`         | Target sequence in FASTA format                                                                                                        |
+| `affinity_files`                 | Subdirectory containing affinity data for specific datasets                                                             |
 | `soakdb_[session_number].sqlite` | SoakDB file in SQLite format <br> - Experimental details for each crystal, including soaking conditions, data collection parameters, and processing results. |
 | `soakdb_[session_number].csv`    | SoakDB file in CSV format <br> - Experimental details for each crystal, including soaking conditions, data collection parameters, and processing results.           |
+| `protein-sequence.fasta`         | Target sequence in FASTA format                                                                                                        |
 
 ---
 
