@@ -6,7 +6,7 @@
 
 Fragalysis is a web-based platform for the visualisation, comparison, and analysis of fragment-bound protein crystal structures, assay measurements, and follow-up virtual ligand screens. It can effectively be divided into:
 
-**Experimental** fragment screening data processed via [XChem Align](https://xchem-align.readthedocs.io) and uploaded to Fragalysis, curated and downloaded via the **"left-hand side" (LHS)** of Fragalysis.
+**Experimental** fragment screening data processed via [XChemAlign](https://xchem-align.readthedocs.io) and uploaded to Fragalysis, curated and downloaded via the **"left-hand side" (LHS)** of Fragalysis.
 
 **Computed** follow-up designs from virtual compound sets uploaded to Fragalysis, curated and downloaded via the **"right-hand side" (RHS)** of Fragalysis.
 
@@ -18,8 +18,9 @@ Fragalysis can be used to explore data in a number of ways:
 
 **Experimental Structures (LHS)**
 
-* [Browsing Experimental data](#browsing-experimental-data)
-* [Curating Experimental data](#curating-experimental-data)
+* [Browsing experimental data](#browsing-experimental-data)
+* [Downloading experimental data](#downloading-experimental-data)
+* [Curating experimental data](#curating-experimental-data)
 * [Uploading assay measurements or computed scores](#uploading-assays)
 
 **Computed Structures (RHS)**
@@ -38,7 +39,7 @@ Fragalysis can be used to explore data in a number of ways:
 
 ### Navigating the homepage
 
-Navigating to the Fragalysis homepage for the first time you will be prompted to log in with your FedID. This will allow you to view the "private targets" associated with your Diamond user account, alongside public and legacy targets:
+When navigating to the Fragalysis homepage you will see targets listed under "Public", "Private", and "Legacy". If you have access to private targets you will be prompted to log in with your Diamond Light Source FedID:
 
 ```{image} _static/media/homepage_login.png
 :width: 1000px
@@ -224,6 +225,118 @@ https://fragalysis.diamond.ac.uk/viewer/react/preview/direct/
 - `target/A71EV2A`: specifies the target name
 - `tas/lb32627-66`: specifies the target access string
 - `compound/ASAP-0016733-001/L/exact`: shows the ligand (`L`) representation for exact `compound` aliases match `ASAP-0016733-001`
+
+---
+
+(downloading-experimental-data)=
+## Downloading experimental data (LHS)
+
+You can download experimental structures directly from the Fraglaysis UI. At the top of the Fragalysis viewer interface, you will see a download button:
+
+```{image} _static/media/download_button.png
+:width: 1000px
+:alt: Download button
+```
+
+This will open the download interface. By default, the download will select "All structures", "Incremental", "single SDF of all ligands" and "Computed copound sets" but there are various selections that allow you to customise your download:
+
+```{image} _static/media/download_interface.png
+:width: 1000px
+:alt: Download interface
+```
+
+| Option                                         | What it does                                                                                     |
+|----------------------------------------------- | -------------------------------------------------------------------------------------------------|
+| ***Subset selection***                         |                                                                                                  |
+| **All structures**                             | Downloads every aligned structure available for the target (`.pdb`)                              |
+| **Structures displayed in the 3D display**     | Downloads only aligned structures currently visible in the viewer (`.pdb`)                       |
+| **Structures selected in the Hit Navigator**   | Downloads only aligned structures you’ve explicitly selected in the hit navigator (`.pdb`)       |
+| **Structures associated with the active tags** | Filters aligned structures based on active annotation tags and downloads those (`.pdb`)          |
+|  |  |
+| ***Map files (re-aligned to reference)***      |                                                                                                  |
+| **PanDDA Event maps**                          | PanDDA output highlighting ligand-binding events; best for detecting signal over noise (`.ccp4`) |
+| **Conventional inspection maps**               | 2Fo-Fc electron density maps used for model building and validation (`.ccp4`)                    |
+| **Conventional residual maps**                 | Fo-Fc difference maps showing unmodelled or incorrectly modelled density (`.ccp4`)               |
+| **Transformations applied for alignments**     | Alignment matrices used to superpose structures/maps onto a reference frame                      |
+| |  |
+| ***Crystallographic files***                   |                                                                                                  |
+| **Coordinate files (not re-aligned)**          | Atomic coordinates in their original reference frame (not aligned) (`.pdb`)                      |
+| **Reflections and map coefficients**           | Structure factor data and map coefficients used for map calculation and refinement (`.mtz`)      |
+| **Ligand definitions and geometry restraints** | Restraints and chemical definitions needed for ligand refinement (`.cif`)                        |
+| **Real-space map files**                       | Maps in real-space format (large files; often unnecessary unless specifically needed) (`.map`)   |
+|  |  |
+| ***Version of data stored in permalink***      |                                                                                                  |
+| **Incremental (always up-to-date)**            | Link always reflects the latest dataset as new structures are added                               |
+| **Preserved (snapshot)**                       | Fixed dataset frozen at the current state; reproducible and unchanging                            |
+|  |  |
+| ***Other***                                    |                                                                                                  |
+| **Single SDF of all ligands**                  | One file containing all ligand structures                 |
+| **Computed compound sets**                     | Includes computed ligand sets       |
+| **SoakDB CSV and SQLite files**                | Metadata database containing experiment details, useful for large-scale analysis                 |
+
+After selecting what files you want, select "Prepare download" to zip your files. Once this is complete (be patient, this can take a few minutes) the "Download" and "Copy permalink" buttons will no longer be greyed out, and a green "Download is ready!" indicator will appear, allowing you to commence the download. These download options, as well as the others available are explained here:
+
+| Option                                      | What it does                                                                       | When to use it                                                               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **Prepare download**                        | Packages your selected files into a `.zip` downloadable bundle                     | Always use this option if downloading a `.zip` from the download interface.  |
+| **Copy permalink** (prepare download first) | Copies a persistent URL that encodes all your current selections                   | Sharing datasets or saving your exact selection for later |
+| **Download** (prepare download first)       | Once prepared, this immediately downloads the dataset with your current selections | Use when you’re ready to download the data locally                               |
+| **(For coders) Copy JSON for API call**     | Copies a structured JSON representation of your selection for programmatic access  | Scripting workflows, automation, or pipeline integration                     |
+| **Show Examples**                           | Opens example usage GitHub page                                                    | If you need useful example / template code.                                  |
+
+### Interpreting the download
+
+A Fragalysis download will contain a minimum of 2 directories, `aligned_files` and `crytallographic_files`. The download will typically include the additional directories `extra_files`, `scripts` and `yaml_files`, as well as some additional files at the top level directory.
+
+Two important top level files are `metadata.csv` and `smiles.smi`. These are both plain-text files. `metadata.csv` will contain information about the context of each ligand and may provide a convenient way to browse through smiles, site labels and PDB codes for each ligand. `smiles.smi` contains a list of all smiles strings that you have downloaded separated by commans. `[target-name]_combined.sdf` may also be present which will contain all the ligand sdf files in a single sdf file.
+
+### Aligned directory
+
+The aligned directory contains a subdirectory for each dataset that was selected for downloading, aligned to a common reference through [XChemAlign](https://xchem-align.readthedocs.io) processing as they appear in the viewer interface. Depending on your selection of options when downloading the data, the follow file suffixes may be present:
+
+> **⚠️ IMPORTANT**  
+> `.ccp4` maps are optimised to work with NGL viewer.  
+> If viewing in PyMOL or COOT, files that align with the XCA aligned model have the suffix `_crystallographic.ccp4`.
+
+
+| File pattern                                              | Description                                                                                                                             |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `[target-name_crystal-name].pdb`                          | Full atomic model. Protein, ligand, and water/ion/buffer molecules                                                                          |
+| `[target-name_crystal-name]_delig-desolv.pdb`             | Protein model only. Ligand and water/ion/buffer molecules removed                                                                        |
+| `[target-name_crystal-name]_delig-solv.pdb`               | Water/ion/buffer molecules molecules only. Protein and ligand molecules removed                                          |
+| `[target-name_crystal-name]_delig.pdb`                    | Protein and solvent/ion/buffer molecules. Ligand molecules removed                                                                      |
+| `[target-name_crystal-name]_event.ccp4`                   | PanDDA event electron density map cut to around 12 Å around the ligand <br> - Background-corrected reflection data higher signal-to-noise enhances ligand evidence corresponding to the PDB file   |
+| `[target-name_crystal-name]_sigmaa.ccp4`                  | 2mFo-DFc σA-weighted map cut to around 12 Å around the ligand <br> - Estimate of the true electron density from diffraction data and atomic model           |
+| `[target-name_crystal-name]_diff.ccp4`                    | mFo-DFc σA-weighted difference map cut to around 12 Å around the ligand <br> - Negative density indicates model without supporting density, positive density indicates unmodelled features |
+| `[target-name_crystal-name]_event_crystallographic.ccp4`  | PanDDA event electron density map cut to around 12 Å around the ligand <br> - Background-corrected reflection data higher signal-to-noise enhances ligand evidence corresponding to the PDB file   |
+| `[target-name_crystal-name]_sigmaa_crystallographic.ccp4` | 2mFo-DFc σA-weighted map cut to around 12 Å around the ligand <br> - Estimate of the true electron density from diffraction data and atomic model           |
+| `[target-name_crystal-name]_diff_crystallographic.ccp4`   | mFo-DFc σA-weighted difference map cut to around 12 Å around the ligand <br> - Negative density indicates model without supporting density, positive density indicates unmodelled features |
+| `[target-name_crystal-name]_ligand.pdb`                   | Ligand structure in PDB format                                                                                                      |
+| `[target-name_crystal-name]_ligand.sdf`                   | Ligand structure in SDF format                                                                                                      |
+| `[target-name_crystal-name]_ligand.smi`                   | Ligand structure in SMILES format                                                                                                |
+
+
+### Crystallographic directory
+
+The `crystallographic_files` directory contains versions of data found in the aligned folder prior to [XChemAlign](https://xchem-align.readthedocs.io) processing. Depending on your selection of options when downloading the data the follow file suffixes may be present:
+
+| File pattern            | Description                                                                                                                                  |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `[crystal-name].pdb`    | Full atomic model. Protein, ligand(s), and solvent/ion/buffer molecules                                                                                                         |
+| `[crystal-name].mtz`    | Reflection data corresponding to the PDB file                                                                                                |
+| `[crystal-name].cif`    | Ligand structure in CIF format                                                                                               |
+
+
+### Extra files
+
+If the SoakDB CSV and/or SQLite option(s) have been selected, their corresponding files can be found in this directory. Beyond this, if this directory is present the files will have been added by the uploader of the data, and therefore has no defined structure. As a result we cannot guess what the contents of the file may be, but we hope that the uploader of the extra files will have provided a readme inside to describe each of the added files.
+Some examples of extra files:
+
+| File pattern                     | Description                                                                                                                                  |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `protein-sequence.fasta`         | Target sequence in FASTA format                                                                                                        |
+| `soakdb_[session_number].sqlite` | SoakDB file in SQLite format <br> - Experimental details for each crystal, including soaking conditions, data collection parameters, and processing results. |
+| `soakdb_[session_number].csv`    | SoakDB file in CSV format <br> - Experimental details for each crystal, including soaking conditions, data collection parameters, and processing results.           |
 
 ---
 

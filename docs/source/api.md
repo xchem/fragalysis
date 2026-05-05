@@ -64,7 +64,7 @@ You are now ready to make a request to the desired endpoint.
 ## Endpoints
 
 ### `/api/upload_target_experiments/`
-This endpoint lets you view dataset (experiment) info. If used with experiment ID, `/api/upload_target_experiments/<id>` the response contains information only about the selected experiment, othewise the list of all experiments is returned. The single experiment object contains the following fields:
+This endpoint lets you view dataset (experiment) info. If used with experiment ID, `/api/upload_target_experiments/<id>` the response contains information only about the selected experiment, otherwise the list of all experiments is returned. The single experiment object contains the following fields:
 
 - id: experiment ID
 - code: experiment code
@@ -134,9 +134,9 @@ This endpoint allows downloading target data from Fragalysis. Working with this 
 - proteins: default '' (empty string, download all observations in target). Comma separated list of observation shortcodes. If used, only the selected observations will be downloaded.
 - all_aligned_structures: default True. Downloads 7 file types:
   - `aligned_files/*.pdb`
-  - `aligned_files/*_apo.pdb`
-  - `aligned_files/*_apo-solv.pdb`
-  - `aligned_files/*_apo-desolv.pdb`
+  - `aligned_files/*_delig.pdb`
+  - `aligned_files/*_delig-solv.pdb`
+  - `aligned_files/*_delig-desolv.pdb`
   - `aligned_files/*_ligand.pdb`
   - `aligned_files/*_ligand.sdf`
   - `aligned_files/*_ligand.smi`
@@ -215,10 +215,10 @@ database or `Not OK` if it cannot.
 The **target_access** section is a list of TAS values assigned to you.
 
 If you are not logged in you can still obtain details of the authenticator,
-and the **ping** status - everything except a listr of TAS values.
+and the **ping** status - everything except a list of TAS values.
 
 >   The ISPyB authenticator is just one authenticator that can be deployed.
-    The administrator may have deployed a different authenticator for you stack,
+    The administrator may have deployed a different authenticator for your stack,
     so always check the version is what you expect.
 
 #### Understanding the authenticator
@@ -236,7 +236,7 @@ Assuming you have the key, authentication statistics can be obtained using a **G
 from the exposed endpoint. In the following example the key is `4pp4CmJP2wCz2EiGgCctG`
 (which is not the actual key of course - you will need to contact the Fragalysis
 administrators to get the real key). Here we use [httpie] (and `curl`)
-to retrieve the statistics: -
+to retrieve the statistics: 
 
     STATS_KEY=4pp4CmJP2wCz2EiGgCctG
 
@@ -248,7 +248,7 @@ The response is quite detailed, and many parts of it will only make sense
 if you understand the inner-workings of the authenticator.
 
 The **auth section** provides information about the type (and version) of authenticator
-that's being used: -
+that's being used: 
 
 ```yaml
 auth:
@@ -259,7 +259,7 @@ auth:
 
 The **code_set section** lists the restricted set of proposal codes that are
 in use. If this list is empty (`[]`) as it is in this example any code is
-permitted by the authenticator: -
+permitted by the authenticator: 
 
 ```yaml
 code_set: []
@@ -291,7 +291,7 @@ ping:
 The **user section** displays simplified results for each user.
 If your user ID is not in the `users -> user_stats` list then proposals have not
 been collected for you. In this example user `abc12345` is associates with 12 TAS
-that were collected from the database at 10:34 (UTC): -
+that were collected from the database at 10:34 (UTC): 
 
 ```yaml
 users:
@@ -301,7 +301,7 @@ users:
   - collected: '2025-10-10T10:34:25.537069+00:00'
 ```
 
-If there are no users known to the authenticator the list will be empty: -
+If there are no users known to the authenticator the list will be empty: 
 
 ```yaml
 users:

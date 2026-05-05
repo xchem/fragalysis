@@ -26,8 +26,9 @@ user_guide.md
 ```
 
 ### Experimental Structures (LHS)
-* {ref}`Browsing Experimental data <browsing-experimental-data>`
-* {ref}`Curating Experimental data <curating-experimental-data>`
+* {ref}`Browsing experimental data <browsing-experimental-data>`
+* {ref}`Downloading experimental data <downloading-experimental-data>`
+* {ref}`Curating experimental data <curating-experimental-data>`
 * {ref}`Uploading assay measurements or computed scores <uploading-assays>`
 
 ### Computed Structures (RHS)
