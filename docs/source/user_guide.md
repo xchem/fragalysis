@@ -286,14 +286,15 @@ After selecting what files you want, select "Prepare download" to zip your files
 
 ### Affinity Data
 
-If a data release contains accompanying affinity data, as part of the download affinity data will be contained in an `extra_files` archive `affinity_files.zip` and typically arranged as follows:
+If a data release contains accompanying affinity data, as part of the download affinity data will be contained in an `affinity_files` subdirectory located inside the  `extra_files` directory of the download and typically arranged as follows:
 
 >`all_affinity_data.csv`\
 >`all_affinity_data.sdf`\
 >`creoptix_raw_data.zip`\
+>`README.md`\
+>`README.pdf`\
 >`sensofit_package_data.zip`\
->`sensofit_walkthough.ipynb`\
->`README.pdf`
+>`sensofit_walkthough.ipynb`
 
 #### All affinity data
 
