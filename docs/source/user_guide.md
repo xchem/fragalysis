@@ -92,9 +92,9 @@ Geometric filtering allows you to limit hits based on their position in 3D space
 
 <img src="_static/media/FilteringSphere.png" alt="lhs" width="600px">
 
-This feature is **ON** by default and can be toggled in the Advanced Search dialog. If you turn it off, any existing geometric filtering is cleared and no spatial filtering will be applied.
+This feature is **ON** by default. Open the "Advanced Search" menu using the filter icon, and toggle "Coordinate search" in the Advanced Search dialog. If you turn it off, any existing geometric filtering is cleared and no spatial filtering will be applied.
 
-<img src="_static/media/AdvancedSearchDialog.png" alt="lhs" width="600px">
+<img src="_static/media/AdvancedSearchDialog_2.png" alt="lhs" width="600px">
 
 ---
 
@@ -182,10 +182,20 @@ See also [Creating direct URLs to specific views](#creating-urls)
 
 Snapshots are saved views of the current analysis state, allowing you to quickly return to a specific set of selected hits and visualisation settings, and making it easy to share or revisit a particular analysis.
 
+To create a snapshot, click "Click to create new snapshot" at the bottom of the Snapshots window, or the "SHARE" button at the top of the Fragalysis interface. Both methods will create a new snapshot in the "Snapshots" interface.
+
 ```{image} _static/media/snapshot.png
 :width: 600px
 :alt: snapshot window
 ```
+Each new snapshot will give you three interactive options:
+
+| Control | Description |
+|--------|-------------|
+| **RENAME** | Allows the user to edit the name of the snapshot from the default date and time format. |
+| **SHARE** | Copies the snapshot URL to the clipboard. |
+| **UPDATE** | Updates the snapshot to the current orientation in the viewer. Note: this **does not** update the date and time in the snapshot. |
+
 (creating-urls)=
 ### Creating direct URLs to specific views
 
