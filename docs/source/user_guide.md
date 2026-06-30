@@ -432,7 +432,7 @@ Some examples of extra files:
 | `affinity_files`                 | Subdirectory containing affinity data for specific datasets                                                             |
 | `soakdb_[session_number].sqlite` | SoakDB file in SQLite format <br> - Experimental details for each crystal, including soaking conditions, data collection parameters, and processing results. |
 | `soakdb_[session_number].csv`    | SoakDB file in CSV format <br> - Experimental details for each crystal, including soaking conditions, data collection parameters, and processing results.           |
-| `protein-sequence.fasta`         | Target sequence in FASTA format                                                                                                        |
+| `protein-sequence.fasta`         | Target sequence* in FASTA format (*can be multiple sequences when multiple constructs are used)                                                                                    |
 
 ---
 
