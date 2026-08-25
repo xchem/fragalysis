@@ -212,7 +212,14 @@ def download_target(
                         # Any payload?
                         with contextlib.suppress(JSONDecodeError):
                             status_json = status.json()
-                            last_message = status_json.get("messages", "")
+                            # The API's 'messages' is a list of messages,
+                            # but older stacks return a single string.
+                            # Either way we're only interested in the last message.
+                            messages = status_json.get("messages", "")
+                            if isinstance(messages, list):
+                                last_message = messages[-1] if messages else ""
+                            else:
+                                last_message = messages
 
                         if last_message and file_url_re.match(last_message):
                             file_url = last_message
